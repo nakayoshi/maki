@@ -7,7 +7,7 @@ if (!THEATER_URL) throw Error("THEATER_URLが読み込めません");
 export const main: HttpFunction = async (req, res) => {
   const text = req.query.text;
   if (typeof text !== "string") {
-    await res.status(404).send("not found");
+    res.status(404).send("not found");
     return;
   }
 
@@ -21,8 +21,8 @@ export const main: HttpFunction = async (req, res) => {
 
   if (receivedTitle !== null) {
     console.debug(`[ finished ] query: ${text}`);
-    await res.send({ result: receivedTitle });
+    res.send({ result: receivedTitle });
     return;
   }
-  await res.send({ result: "" });
+  res.send({ result: "" });
 };
