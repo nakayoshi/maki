@@ -11,7 +11,7 @@ export const main: HttpFunction = async (req, res) => {
     return;
   }
 
-  const browser = await chromium.launch({ channel: "chrome", headless: true });
+  const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
   const url = new URL(THEATER_URL);
