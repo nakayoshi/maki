@@ -1,4 +1,4 @@
-FROM node:18 as base
+FROM node:18 as dependencies
 
 WORKDIR /app
 
@@ -10,17 +10,19 @@ RUN cd ./packages/@nakayoshi/maki-cameraman/ && pnpm install -r --frozen-lockfil
 RUN pnpm dlx playwright install --with-deps chromium
 RUN apt-get update && apt-get install tini -y
 
-FROM base as builder
+FROM node:18 as builder
 
-WORKDIR /app/packages/@nakayoshi/maki-cameraman/
-RUN npm install -g tsc
+WORKDIR /build
+COPY --from=dependencies /app/node_modules ./node_modules
 COPY packages/@nakayoshi/maki-cameraman .
-COPY --from=base /app/node_modules ./node_modules
+RUN npm install -g pnpm
+RUN pnpm install 
 RUN pnpm build
 
-FROM builder as runtime
+
+FROM dependencies as runtime
 
 ENV THEATER_URL https://maki-sandy.vercel.app
 WORKDIR /app/packages/@nakayoshi/maki-cameraman/
-COPY --from=builder /app/packages/@nakayoshi/maki-cameraman/dist ./dist
+COPY --from=builder /build/dist ./dist
 CMD [ "tini", "node", "./dist/main.js" ]
