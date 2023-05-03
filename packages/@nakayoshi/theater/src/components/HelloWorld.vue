@@ -2,7 +2,6 @@
 import { defineProps } from "vue";
 
 defineProps<{ msg: string }>();
-
 </script>
 
 <template>
