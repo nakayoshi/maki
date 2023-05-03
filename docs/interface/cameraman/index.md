@@ -4,10 +4,29 @@
 |name|type|required|
 |--|--|--|
 |id|string|y|
-|prompt|string|y|
 |video_type|VideoType|y|
+|scene|List\<Point\>|y|
 
 ## VideoType
 - YUKKURI
 - ZUNDAMON
 - RANKING
+
+## Point
+|name|type|required|
+|--|--|--|
+|prompt|string|y|
+|images|List\<Image\>|y|
+
+## Image
+|name|type|required|
+|--|--|--|
+|image_id|string|y|
+|image_pos|ImagePosId|y|
+
+## ImagePosId
+- BACKGROUND
+- LEFT_CHARACTOR
+- RIGHT_CHARACTOR
+- MAIN_VIEW
+- TEXT_BACKGROUND
