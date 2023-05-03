@@ -3,11 +3,10 @@ import { test, expect } from "vitest";
 
 test("parses", () => {
   const result = Request.safeParse({
-    id: "1",
     type: "YUKKURI",
     scenes: [
       {
-        prompt: "test",
+        caption: "test",
         images: [
           {
             url: "https://example.com",
