@@ -1,4 +1,10 @@
+/** @type {import('eslint').ESLint.ConfigData } */
 module.exports = {
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
   env: {
     browser: true,
     es2021: true,
@@ -7,15 +13,18 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:prettier/recommended",
-    "plugin:vue/vue3-essential",
     "plugin:@typescript-eslint/recommended",
   ],
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-  },
   plugins: ["vue", "@typescript-eslint"],
-  rules: {},
-  overrides: [],
+  overrides: [
+    {
+      files: ["**/*.vue"],
+      parser: "vue-eslint-parser",
+      extends: [
+        "plugin:vue/vue3-essential",
+        "@vue/eslint-config-typescript/recommended",
+        "@vue/eslint-config-prettier",
+      ],
+    },
+  ],
 };
