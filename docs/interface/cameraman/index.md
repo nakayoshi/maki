@@ -22,9 +22,9 @@
 |name|type|required|
 |--|--|--|
 |image_id|string|y|
-|image_pos|ImagePosId|y|
+|image_pos|ImagePos|y|
 
-## ImagePosId
+## ImagePos
 - BACKGROUND
 - LEFT_CHARACTOR
 - RIGHT_CHARACTOR

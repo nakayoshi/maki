@@ -19,9 +19,9 @@ webページに埋め込むデータの構造
 |name|type|required|
 |--|--|--|
 |image_url|string|y|
-|image_pos|ImagePosId|y|
+|image_pos|ImagePos|y|
 
-## ImagePosId
+## ImagePos
 - BACKGROUND
 - LEFT_CHARACTOR
 - RIGHT_CHARACTOR
