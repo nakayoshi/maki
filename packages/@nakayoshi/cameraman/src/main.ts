@@ -1,9 +1,5 @@
-import express from "express";
+import type { HttpFunction } from "@google-cloud/functions-framework";
 
-const app = express();
-
-app.get("/", (_req, res) => {
+export const main: HttpFunction = async (_req, res) => {
   res.send("Hello, world!");
-});
-
-app.listen(3000);
+};
