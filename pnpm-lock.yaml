@@ -37,6 +37,9 @@ importers:
       '@google-cloud/functions-framework':
         specifier: ^3.2.0
         version: 3.2.0
+      playwright-core:
+        specifier: ^1.33.0
+        version: 1.33.0
     devDependencies:
       '@types/express':
         specifier: ^4.17.17
@@ -2432,6 +2435,12 @@ packages:
       mlly: 1.2.0
       pathe: 1.1.0
     dev: true
+
+  /playwright-core@1.33.0:
+    resolution: {integrity: sha512-aizyPE1Cj62vAECdph1iaMILpT0WUDCq3E6rW6I+dleSbBoGbktvJtzS6VHkZ4DKNEOG9qJpiom/ZxO+S15LAw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: false
 
   /postcss-selector-parser@6.0.12:
     resolution: {integrity: sha512-NdxGCAZdRrwVI1sy59+Wzrh+pMMHxapGnpfenDVlMEXoOcvt4pGE0JLK9YY2F5dLxcFYA/YbVQKhcGU+FtSYQg==}
