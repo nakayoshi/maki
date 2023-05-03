@@ -4,7 +4,8 @@
   "main": "index.cjs",
   "scripts": {
     "build": "tsc",
-    "start": "functions-framework --target=main"
+    "start": "functions-framework --target=main",
+    "prepare": "npx playwright install chromium"
   },
   "license": "MIT",
   "dependencies": {
