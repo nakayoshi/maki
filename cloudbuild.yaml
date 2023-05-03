@@ -1,0 +1,23 @@
+steps:
+  - name: node:18
+    entrypoint: pnpm
+    args: ["install", "-r"]
+    dir: "./packages/@nakayoshi"
+
+  - name: node:18
+    entrypoint: yarn
+    args: ["run", "-r", "build"]
+    dir: "./packages/@nakayoshi"
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    args:
+      [
+        "gcloud",
+        "functions",
+        "deploy",
+        "maki-cameraman",
+        "--entry-point=main",
+        "--runtime=nodejs18",
+        "--trigger-http",
+      ]
+    dir: "./packages/cameraman"
