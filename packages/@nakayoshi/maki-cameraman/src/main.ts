@@ -1,5 +1,5 @@
 import type { HttpFunction } from "@google-cloud/functions-framework";
-import { chromium } from "playwright-core";
+import { launch } from "puppeteer";
 
 const THEATER_URL = process.env.THEATER_URL;
 if (!THEATER_URL) throw Error("THEATER_URLが読み込めません");
@@ -11,7 +11,15 @@ export const main: HttpFunction = async (req, res) => {
     return;
   }
 
-  const browser = await chromium.launch({ channel: "chrome", headless: true });
+  const browser = await launch({
+    headless: true,
+    args: ["--no-sandbox"],
+    defaultViewport: {
+      width: 1920,
+      height: 1080,
+    },
+  });
+
   const page = await browser.newPage();
 
   const url = new URL(THEATER_URL);
@@ -21,7 +29,9 @@ export const main: HttpFunction = async (req, res) => {
 
   await page.goto(url.toString());
 
-  const receivedTitle = await page.locator("h1").textContent();
+  const receivedTitle = await page.$("h1").then((handle) => {
+    return handle?.evaluate((el) => el.textContent);
+  });
 
   await browser.close();
 
