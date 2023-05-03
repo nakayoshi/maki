@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HelloWorld from "../components/HelloWorld.vue";
+import RankingScreen from "../components/RankingScreen.vue";
 
 const routes = [
   {
     path: "/",
-    name: "HelloWorld",
-    component: HelloWorld,
+    name: "ranking",
+    component: RankingScreen,
   },
 ];
 
