@@ -1,24 +1,37 @@
+# https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
 steps:
-  - name: gplane/pnpm:8
-    entrypoint: pnpm
-    args: ["install", "-r"]
-    dir: "./packages/@nakayoshi/maki-cameraman"
-
-  - name: gplane/pnpm:8
-    entrypoint: pnpm
-    args: ["run", "-r", "build"]
-    dir: "./packages/@nakayoshi/maki-cameraman"
-
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+  - id: build-maki-cameraman
+    name: docker
     args:
-      [
-        "gcloud",
-        "functions",
-        "deploy",
-        "maki-cameraman",
-        "--entry-point=main",
-        "--runtime=nodejs18",
-        "--trigger-http",
-        "--allow-unauthenticated",
-      ]
-    dir: "./packages/@nakayoshi/maki-cameraman"
+      - build
+      - "--no-cache"
+      - "-t"
+      - $_IMAGE_NAME
+      # - "-f ./docker/Dockerfile"
+      - .
+
+  - id: push-maki-cameraman
+    name: docker
+    args:
+      - push
+      - $_IMAGE_NAME
+
+  - id: deploy-maki-cameraman
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: gcloud
+    args:
+      - run
+      - services
+      - update
+      - $_SERVICE_NAME
+      - "--platform=managed"
+      - "--image=$_IMAGE_NAME"
+      - "--region=$_DEPLOY_REGION"
+      - "--quiet"
+
+images:
+  - $_IMAGE_NAME
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  dynamicSubstitutions: true
