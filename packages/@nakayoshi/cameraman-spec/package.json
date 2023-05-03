@@ -2,12 +2,21 @@
   "name": "@nakayoshi/cameraman-spec",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/openapi.json",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "bash build.sh",
+    "test": "vitest run"
   },
   "license": "MIT",
   "dependencies": {
     "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "^4.6.0",
+    "glob": "^10.2.2",
+    "mkdirp": "^3.0.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.2",
+    "vitest": "^0.30.1"
   }
 }
