@@ -1,5 +1,5 @@
 {
-  "name": "@nakayoshi/cameraman-spec",
+  "name": "@nakayoshi/maki-cameraman-spec",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/openapi.json",
