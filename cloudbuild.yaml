@@ -1,13 +1,13 @@
 steps:
-  - name: node:18
+  - name: gplane/pnpm:8
     entrypoint: pnpm
     args: ["install", "-r"]
-    dir: "./packages/@nakayoshi"
+    dir: "./packages/@nakayoshi/cameraman"
 
-  - name: node:18
-    entrypoint: yarn
+  - name: gplane/pnpm:8
+    entrypoint: pnpm
     args: ["run", "-r", "build"]
-    dir: "./packages/@nakayoshi"
+    dir: "./packages/@nakayoshi/cameraman"
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     args:
@@ -19,5 +19,6 @@ steps:
         "--entry-point=main",
         "--runtime=nodejs18",
         "--trigger-http",
+        "--allow-unauthenticated",
       ]
-    dir: "./packages/cameraman"
+    dir: "./packages/@nakayoshi/cameraman"
