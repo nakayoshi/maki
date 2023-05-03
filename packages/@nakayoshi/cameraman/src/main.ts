@@ -13,7 +13,13 @@ export const main: HttpFunction = async (req, res) => {
 
   const browser = await chromium.launch({ channel: "chrome", headless: true });
   const page = await browser.newPage();
-  await page.goto(THEATER_URL + `?text=${text}`);
+
+  const url = new URL(THEATER_URL);
+  url.search = new URLSearchParams({
+    text,
+  }).toString();
+
+  await page.goto(url.toString());
 
   const receivedTitle = await page.locator("h1").textContent();
 
