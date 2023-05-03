@@ -1,5 +1,5 @@
 {
-  "name": "theater",
+  "name": "@nakayoshi/maki-theater",
   "private": true,
   "version": "0.0.0",
   "type": "module",

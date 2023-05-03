@@ -2,12 +2,12 @@ steps:
   - name: gplane/pnpm:8
     entrypoint: pnpm
     args: ["install", "-r"]
-    dir: "./packages/@nakayoshi/cameraman"
+    dir: "./packages/@nakayoshi/maki-cameraman"
 
   - name: gplane/pnpm:8
     entrypoint: pnpm
     args: ["run", "-r", "build"]
-    dir: "./packages/@nakayoshi/cameraman"
+    dir: "./packages/@nakayoshi/maki-cameraman"
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     args:
@@ -21,4 +21,4 @@ steps:
         "--trigger-http",
         "--allow-unauthenticated",
       ]
-    dir: "./packages/@nakayoshi/cameraman"
+    dir: "./packages/@nakayoshi/maki-cameraman"
