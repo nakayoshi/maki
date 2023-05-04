@@ -56,7 +56,7 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
     }
 
     if (type === "ranking") {
-      const browser = await chromium.launch({ headless: false });
+      const browser = await chromium.launch({ headless: true });
       const page = await browser.newPage({
         recordVideo: {
           dir: this.videoDir,
