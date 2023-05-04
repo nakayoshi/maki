@@ -1,5 +1,5 @@
 import ffmpeg from "fluent-ffmpeg";
-import { CombineVideoAndAudio } from "../app/combine-video-and-audio";
+import { ICombineVideoAndAudio } from "../app/combine-video-and-audio";
 
 const ffprobe = (path: string) => {
   return new Promise<ffmpeg.FfprobeData>((resolve, reject) => {
@@ -10,7 +10,7 @@ const ffprobe = (path: string) => {
   });
 };
 
-export class CombineVideoAndAudioFfmpeg implements CombineVideoAndAudio {
+export class CombineVideoAndAudioFfmpeg implements ICombineVideoAndAudio {
   async combine(
     videoPath: string,
     audioPath: string,

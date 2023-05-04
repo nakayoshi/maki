@@ -7,7 +7,7 @@ import { CreateVideo } from "./app/create-video";
 import { StorageCloudStorage } from "./infra/storage-cloud-storage";
 import { VideoGeneratorPlaywright } from "./infra/video-generator-playwright";
 import path from "path";
-import { CombineVideoAndAudio } from "./app/combine-video-and-audio";
+import { ICombineVideoAndAudio } from "./app/combine-video-and-audio";
 
 const pathOfShiningStar = path.join(
   __dirname,

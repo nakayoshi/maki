@@ -1,4 +1,4 @@
-export interface CombineVideoAndAudio {
+export interface ICombineVideoAndAudio {
   combine(
     videoPath: string,
     audioPath: string,

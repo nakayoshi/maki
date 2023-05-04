@@ -1,6 +1,6 @@
 import { IVideoGenerator, RankingItem } from "./video-generator";
 import { IStorage } from "./storage";
-import { CombineVideoAndAudio } from "./combine-video-and-audio";
+import { ICombineVideoAndAudio } from "./combine-video-and-audio";
 import { randomUUID } from "crypto";
 import path from "path";
 
@@ -20,7 +20,7 @@ export class CreateVideo {
   constructor(
     private readonly storage: IStorage,
     private readonly videoGenerator: IVideoGenerator,
-    private readonly combineVideoAndAudio: CombineVideoAndAudio
+    private readonly combineVideoAndAudio: ICombineVideoAndAudio
   ) {}
 
   async invoke(
