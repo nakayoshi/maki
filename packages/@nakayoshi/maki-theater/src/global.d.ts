@@ -1,7 +1,7 @@
-import { MaterialEvent } from "./models/materialEvent";
+import { ScenarioEvent } from "./models/scenarioEvent";
 
 declare global {
   interface WindowEventMap {
-    InjectMaterial: MaterialEvent;
+    InjectScenario: ScenarioEvent;
   }
 }
