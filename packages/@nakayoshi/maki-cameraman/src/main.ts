@@ -34,4 +34,5 @@ app.get("/", async (req, res) => {
   res.send({ result: "" });
 });
 
-app.listen(3000);
+const port = Number(process.env.PORT);
+app.listen(port);
