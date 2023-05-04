@@ -31,7 +31,20 @@ app.post("/rest/v1/videos", async (req, res) => {
   }
 
   if (body.type === "RANKING") {
-    res.status(501).send("not implemented");
+    const storage = new StorageCloudStorage("maki-cameraman-outputs");
+    const videoGenerator = new VideoGeneratorPlaywright(
+      new URL("/ranking", process.env.THEATER_URL as string).toString(),
+      path.join(__dirname, "../videos/"),
+      { width: 1920, height: 1080 }
+    );
+
+    const createVideo = new CreateVideo(storage, videoGenerator);
+    const url = await createVideo.invoke({
+      type: "RANKING",
+      items: body.items,
+    });
+
+    res.send({ url } as Methods["post"]["resBody"]);
   }
 
   if (body.type === "TEXT") {

@@ -11,7 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "pinia": "^2.0.35",
+    "@vueuse/core": "^10.1.2",
     "vue": "^3.2.47",
     "vue-router": "4"
   },
