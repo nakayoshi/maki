@@ -27,9 +27,7 @@ defineProps<{
       v-bind:rank="item.rank"
       v-bind:imageUrl="item.url"
     />
-    <audio src="/public/maou_14_shining_star.ogg" autoplay loop>
-      あなたのブラウザーは <code>audio</code>要素をサポートしていません。
-    </audio>
+    <h1></h1>
   </div>
 </template>
 
