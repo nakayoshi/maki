@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { onMounted, ref } from "vue";
+import RankingItemComponent from "./pages/ranking/RankingItem.vue";
+import type { Ref } from "vue";
+import RankingItem from "../models/data/RankingItem";
 
-// import { useRoute } from "vue-router";
-
-import RankingItem from "./pages/ranking/RankingItem.vue";
-
-interface RankingData {
-  rank: number;
-  title: string;
-  description: string;
-  url: string;
-}
-
-defineProps<{
-  list: RankingData[];
+const props = defineProps<{
+  list: RankingItem[];
 }>();
+
+const scenario: Ref<RankingItem[]> = ref(props.list);
+
+onMounted(() => {
+  window.addEventListener("InjectScenario", (e) => {
+    scenario.value = e.detail;
+    console.log(e.detail);
+  });
+});
 </script>
 
 <template>
   <div class="video-screen">
-    <RankingItem
-      v-for="item in list"
+    <RankingItemComponent
+      v-for="item in scenario"
       v-bind:key="item.rank"
       v-bind:title="item.title"
       v-bind:description="item.description"
