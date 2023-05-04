@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 
-const props = defineProps({
-  title: String,
-  description: String,
-  rank: Number,
-  imageUrl: String,
-});
+const props = defineProps<{
+  title: string;
+  description: string;
+  rank: number;
+  imageUrl: string;
+}>();
 
 const image = "url(" + props.imageUrl + ")";
 </script>

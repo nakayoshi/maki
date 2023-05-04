@@ -12,12 +12,9 @@ interface RankingData {
   url: string;
 }
 
-const props = defineProps({
-  list: {
-    require: true,
-    type: Object as PropType<RankingData[]>,
-  },
-});
+defineProps<{
+  list: RankingData[];
+}>();
 </script>
 
 <template>
