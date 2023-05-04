@@ -1,12 +1,12 @@
 import express from "express";
 import * as OpenApiValidator from "express-openapi-validator";
-import { chromium } from "playwright-core";
 import apiSpec from "@nakayoshi/maki-cameraman-spec";
 import swaggerUi from "swagger-ui-express";
 import { Methods } from "./adapters/generated/rest/v1/videos";
 import { CreateVideo } from "./app/create-video";
 import { StorageCloudStorage } from "./infra/storage-cloud-storage";
 import { VideoGeneratorPlaywright } from "./infra/video-generator-playwright";
+import path from "path";
 
 const app = express();
 app.use(express.json());
@@ -35,10 +35,10 @@ app.post("/rest/v1/videos", async (req, res) => {
   }
 
   if (body.type === "TEXT") {
-    const storage = new StorageCloudStorage("maki-cameraman");
+    const storage = new StorageCloudStorage("maki-cameraman-outputs");
     const videoGenerator = new VideoGeneratorPlaywright(
       process.env.THEATER_URL as string,
-      "./videos/",
+      path.join(__dirname, "../videos/"),
       { width: 1920, height: 1080 }
     );
 

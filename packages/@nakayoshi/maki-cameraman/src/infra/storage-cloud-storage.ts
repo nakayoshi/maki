@@ -1,3 +1,4 @@
+import fs from "fs";
 import { Storage as CloudStorage } from "@google-cloud/storage";
 import { IStorage, File } from "../app/storage";
 
@@ -6,16 +7,17 @@ export class StorageCloudStorage implements IStorage {
 
   private readonly storage = new CloudStorage();
 
-  async create(filename: string, source: Buffer): Promise<File>;
-  async create(filename: string, path: string): Promise<File>;
-  async create(filename: string, path: Buffer | string): Promise<File> {
+  async upload(path: string): Promise<File> {
     if (typeof path !== "string") {
       throw new Error("Upload from buffer is not supported yet");
     }
 
+    if (!fs.existsSync(path)) {
+      throw new Error(`Given file ${path} does not exist`);
+    }
+
     const bucket = this.storage.bucket(this.bucket);
-    const file = bucket.file(filename);
-    await file.save(path);
+    const [file] = await bucket.upload(path);
 
     return {
       filename: file.name,

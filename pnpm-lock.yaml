@@ -40,6 +40,9 @@ importers:
       '@nakayoshi/maki-cameraman-spec':
         specifier: workspace:^
         version: link:../maki-cameraman-spec
+      aspida:
+        specifier: ^1.12.0
+        version: 1.12.0
       express:
         specifier: ^4.18.2
         version: 4.18.2

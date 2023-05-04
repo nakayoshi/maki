@@ -4,6 +4,5 @@ export interface File {
 }
 
 export interface IStorage {
-  create(filename: string, source: Buffer): Promise<File>;
-  create(filename: string, path: string): Promise<File>;
+  upload(path: string): Promise<File>;
 }
