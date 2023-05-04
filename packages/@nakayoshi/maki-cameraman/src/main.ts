@@ -7,6 +7,12 @@ import { CreateVideo } from "./app/create-video";
 import { StorageCloudStorage } from "./infra/storage-cloud-storage";
 import { VideoGeneratorPlaywright } from "./infra/video-generator-playwright";
 import path from "path";
+import { CombineVideoAndAudioFfmpeg } from "./infra/combine-video-and-audio-ffmpeg";
+
+const pathOfShiningStar = path.join(
+  __dirname,
+  "../assets/maou_14_shining_star.mp3"
+);
 
 const app = express();
 app.use(express.json());
@@ -37,8 +43,17 @@ app.post("/rest/v1/videos", async (req, res) => {
       path.join(__dirname, "../videos/"),
       { width: 1920, height: 1080 }
     );
+    const combineVideoAndAudio = new CombineVideoAndAudioFfmpeg();
 
-    const createVideo = new CreateVideo(storage, videoGenerator);
+    const createVideo = new CreateVideo(
+      storage,
+      videoGenerator,
+      combineVideoAndAudio,
+      {
+        audioPath: pathOfShiningStar,
+        outputDir: path.join(__dirname, "../videos/"),
+      }
+    );
     const url = await createVideo.invoke({
       type: "RANKING",
       items: body.items,
@@ -54,8 +69,17 @@ app.post("/rest/v1/videos", async (req, res) => {
       path.join(__dirname, "../videos/"),
       { width: 1920, height: 1080 }
     );
+    const combineVideoAndAudio = new CombineVideoAndAudioFfmpeg();
 
-    const createVideo = new CreateVideo(storage, videoGenerator);
+    const createVideo = new CreateVideo(
+      storage,
+      videoGenerator,
+      combineVideoAndAudio,
+      {
+        audioPath: pathOfShiningStar,
+        outputDir: path.join(__dirname, "../videos/"),
+      }
+    );
     const url = await createVideo.invoke({
       type: "TEXT",
       text: body.text,
