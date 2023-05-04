@@ -9,6 +9,7 @@
     "autodocs",
     "cloudsdktool",
     "codegen",
+    "ffprobe",
     "gcloud",
     "Maki",
     "nakayoshi",
