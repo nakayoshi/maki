@@ -15,4 +15,4 @@ RUN pnpm run -F @nakayoshi/maki-cameraman-spec -F @nakayoshi/maki-cameraman buil
 
 EXPOSE ${PORT}
 
-CMD [ "tini", "node", "./dist/main.js" ]
+CMD [ "tini", "--", "pnpm", "-F", "@nakayoshi/maki-cameraman", "start" ]
