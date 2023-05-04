@@ -9,13 +9,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "zod": "^3.21.4"
-  },
-  "devDependencies": {
+    "zod": "^3.21.4",
     "@asteasolutions/zod-to-openapi": "^4.6.0",
     "glob": "^10.2.2",
     "mkdirp": "^3.0.1",
-    "typescript": "^5.0.4",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
     "vite": "^4.3.2",
     "vitest": "^0.30.1"
   }
