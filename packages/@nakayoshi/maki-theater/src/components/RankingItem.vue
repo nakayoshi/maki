@@ -28,6 +28,7 @@ const image = "url(" + props.imageUrl + ")";
 
 <style scoped>
 .card {
+  flex: 1 0 auto;
   width: 525px;
   height: 1080px;
   margin: 10px;
