@@ -1,3 +1,4 @@
+import path from "node:path";
 import { IVideoGenerator } from "../app/video-generator";
 import { chromium } from "playwright-core";
 
@@ -34,16 +35,15 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
     await page.goto(url.toString());
 
     await page.waitForLoadState("networkidle");
-    await browser.close();
 
-    // console.debug(`[ finished ] query: ${text}`);
-    const path = await page.video()?.path();
-
-    if (path == null) {
+    const video = page.video();
+    if (video == null) {
       throw new Error("Could not save video");
     }
+    const videoPath = await video.path();
+    await Promise.allSettled([browser.close(), video.saveAs(videoPath)]);
 
-    return path;
+    return videoPath;
   }
 
   private getUrl(text: string) {
