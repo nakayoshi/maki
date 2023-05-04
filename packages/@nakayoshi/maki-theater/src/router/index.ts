@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import RankingScreen from "../components/RankingScreen.vue";
-import HelloWorld from "../components/HelloWorld.vue";
+import RankingScreen from "../pages/RankingScreen.vue";
+import HelloWorld from "../pages/HelloWorld.vue";
 
 const routes = [
   {
