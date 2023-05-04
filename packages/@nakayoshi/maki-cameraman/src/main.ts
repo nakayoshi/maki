@@ -24,9 +24,7 @@ app.get("/", async (req, res) => {
 
   await page.goto(url.toString());
 
-  // h1要素が表示されるまで待つ
-  await page.locator("h1").textContent();
-
+  await page.waitForLoadState("networkidle");
   await browser.close();
 
   console.debug(`[ finished ] query: ${text}`);
