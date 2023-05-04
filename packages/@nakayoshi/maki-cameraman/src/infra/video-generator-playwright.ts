@@ -1,5 +1,4 @@
-import path from "node:path";
-import { IVideoGenerator } from "../app/video-generator";
+import { IVideoGenerator, RankingItem } from "../app/video-generator";
 import { chromium } from "playwright-core";
 
 type VideoSize = {
@@ -14,36 +13,76 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
     private readonly videoSize: VideoSize
   ) {}
 
-  async generate(type: string, text: string): Promise<string> {
-    if (type !== "text") {
-      throw new Error(`Type ${type} is not supported`);
-    }
+  async generate(type: "text", text: string): Promise<string>;
+  async generate(type: "ranking", items: RankingItem[]): Promise<string>;
+  async generate(
+    ...args: ["text", string] | ["ranking", RankingItem[]]
+  ): Promise<string> {
+    const [type, params] = args;
 
-    const browser = await chromium.launch({ headless: true });
+    if (type === "text") {
+      const browser = await chromium.launch({ headless: true });
 
-    const page = await browser.newPage({
-      recordVideo: {
-        dir: this.videoDir,
-        size: {
-          width: this.videoSize.width,
-          height: this.videoSize.height,
+      const page = await browser.newPage({
+        recordVideo: {
+          dir: this.videoDir,
+          size: {
+            width: this.videoSize.width,
+            height: this.videoSize.height,
+          },
         },
-      },
-    });
+      });
 
-    const url = this.getUrl(text);
-    await page.goto(url.toString());
+      const url = this.getUrl(params);
+      await page.goto(url.toString());
 
-    await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("networkidle");
 
-    const video = page.video();
-    if (video == null) {
-      throw new Error("Could not save video");
+      const video = page.video();
+      if (video == null) {
+        throw new Error("Could not save video");
+      }
+      const videoPath = await video.path();
+      await Promise.allSettled([browser.close(), video.saveAs(videoPath)]);
+
+      return videoPath;
     }
-    const videoPath = await video.path();
-    await Promise.allSettled([browser.close(), video.saveAs(videoPath)]);
 
-    return videoPath;
+    if (type === "ranking") {
+      const browser = await chromium.launch({ headless: false });
+      const page = await browser.newPage({
+        recordVideo: {
+          dir: this.videoDir,
+          size: {
+            width: this.videoSize.width,
+            height: this.videoSize.height,
+          },
+        },
+      });
+      await page.goto(this.theaterUrl);
+
+      // theaterのカスタムイベント`InjectScenario`をdispatchする
+      await page.evaluateHandle((p) => {
+        const customEvent = new CustomEvent("InjectScenario", {
+          detail: p,
+        });
+        window.dispatchEvent(customEvent);
+      }, params);
+
+      await page.waitForLoadState("networkidle");
+
+      const video = page.video();
+      if (video == null) {
+        throw new Error("Could not save video");
+      }
+      const videoPath = await video.path();
+      await Promise.allSettled([browser.close(), video.saveAs(videoPath)]);
+      // await video.saveAs(videoPath);
+
+      return videoPath;
+    }
+
+    throw new Error("Not Supported Type");
   }
 
   private getUrl(text: string) {
