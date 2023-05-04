@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
-
-// import { useRoute } from "vue-router";
-
+import { onMounted, ref } from "vue";
 import RankingItem from "./pages/ranking/RankingItem.vue";
+import type { Ref } from "vue";
+import { MaterialEvent } from "../models/materialEvent";
+import RankingData from "../models/data/RankingData";
 
-interface RankingData {
-  rank: number;
-  title: string;
-  description: string;
-  url: string;
-}
+const list: Ref<RankingData[]> = ref([]);
 
-defineProps<{
-  list: RankingData[];
-}>();
+onMounted(() => {
+  window.addEventListener("InjectMaterial", function (e: MaterialEvent) {
+    list.value = e.detail;
+  });
+});
 </script>
 
 <template>
