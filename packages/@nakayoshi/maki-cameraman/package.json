@@ -4,7 +4,7 @@
   "main": "index.cjs",
   "scripts": {
     "build": "tsc",
-    "start": "functions-framework --target=main"
+    "start": "node ./dist/main.js"
   },
   "license": "MIT",
   "dependencies": {
