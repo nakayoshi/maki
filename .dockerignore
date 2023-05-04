@@ -1,2 +1,11 @@
 dist
 node_modules
+cspell.json
+LICENSE
+README.md
+docs
+.github
+.vscode
+.eslint*
+.gcloud*
+cloud*
