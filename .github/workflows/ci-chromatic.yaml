@@ -1,0 +1,52 @@
+# Borrowed from https://www.chromatic.com/docs/github-actions
+name: "CI: Chromatic"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches-ignore:
+      - "dependabot/**"
+    paths:
+      - packages/@nakayoshi/maki-theater/**
+  workflow_dispatch:
+
+jobs:
+  chromatic-deployment:
+    name: Chromatic Deployment
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      # https://www.chromatic.com/docs/github-actions#support-for-codeactionscheckoutv2code-and-above
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm i pnpm@latest -g
+
+      - name: Setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: |
+          pnpm --filter maki-theater run build-storybook
+
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          autoAcceptChanges: main
+          exitZeroOnChanges: true
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          storybookBuildDir: packages/@nakayoshi/maki-theater/storybook-static
+          token: ${{ secrets.GITHUB_TOKEN }}
