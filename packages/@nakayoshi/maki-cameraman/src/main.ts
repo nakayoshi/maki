@@ -14,7 +14,7 @@ app.get("/", async (req, res) => {
 
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({
-    recordVideo: { dir: "./", size: { width: 1920, height: 1080 } },
+    recordVideo: { dir: "./videos/", size: { width: 1920, height: 1080 } },
   });
 
   const url = new URL(THEATER_URL);
