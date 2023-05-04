@@ -35,6 +35,7 @@ const image = "url(" + props.imageUrl + ")";
   overflow: hidden;
   background-color: black;
   padding: 0%;
+  font: "Noto Sans JP";
 }
 .card__img-frame {
   width: 525px;
@@ -57,8 +58,8 @@ const image = "url(" + props.imageUrl + ")";
   line-height: 125%;
   color: white;
   text-align: center;
-  font-size: 30px;
-  margin-top: 20%;
+  font-size: 40px;
+  margin-top: 10%;
 }
 .card__overview-text {
   font-size: 12px;
@@ -73,6 +74,6 @@ const image = "url(" + props.imageUrl + ")";
   font-size: 110px;
   font-weight: bold;
   background-color: darkgray;
-  width: 525pxß;
+  width: 525px;
 }
 </style>
