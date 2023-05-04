@@ -1,3 +1,3 @@
-import type RankingData from "./data/RankingData";
+import type RankingData from "./data/RankingItem";
 
-export type ScenarioEvent = CustomEvent<RankingData[]>;
+export type InjectScenarioEvent = CustomEvent<RankingData[]>;

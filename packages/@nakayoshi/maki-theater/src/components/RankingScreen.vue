@@ -1,26 +1,26 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import RankingItem from "./pages/ranking/RankingItem.vue";
+import RankingItemComponent from "./pages/ranking/RankingItem.vue";
 import type { Ref } from "vue";
-import { ScenarioEvent } from "../models/scenarioEvent";
-import RankingData from "../models/data/RankingData";
+import RankingItem from "../models/data/RankingItem";
 
 const props = defineProps<{
-  list: RankingData[];
+  list: RankingItem[];
 }>();
 
-const scenario: Ref<RankingData[]> = ref(props.list);
+const scenario: Ref<RankingItem[]> = ref(props.list);
 
 onMounted(() => {
-  window.addEventListener("InjectScenario", (e: ScenarioEvent) => {
+  window.addEventListener("InjectScenario", (e) => {
     scenario.value = e.detail;
+    console.log(e.detail);
   });
 });
 </script>
 
 <template>
   <div class="video-screen">
-    <RankingItem
+    <RankingItemComponent
       v-for="item in scenario"
       v-bind:key="item.rank"
       v-bind:title="item.title"
