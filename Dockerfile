@@ -1,5 +1,5 @@
 FROM node:18 as dependencies
-
+ENV HOME="/home"
 WORKDIR /app
 
 COPY pnpm-*.yaml .
@@ -11,6 +11,7 @@ RUN pnpm dlx playwright install --with-deps chromium
 RUN apt-get update && apt-get install tini -y
 
 FROM node:18 as builder
+ENV HOME="/home"
 
 WORKDIR /build
 COPY --from=dependencies /app/node_modules ./node_modules
@@ -19,9 +20,10 @@ RUN npm install -g pnpm
 RUN pnpm install 
 RUN pnpm build
 
-
 FROM dependencies as runtime
 
 WORKDIR /app/packages/@nakayoshi/maki-cameraman/
 COPY --from=builder /build/dist ./dist
+EXPOSE ${PORT}
+
 CMD [ "tini", "node", "./dist/main.js" ]

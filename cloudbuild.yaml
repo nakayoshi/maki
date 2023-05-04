@@ -1,3 +1,11 @@
+---
+options:
+  substitutionOption: ALLOW_LOOSE
+  dynamicSubstitutions: true
+
+images:
+  - $_IMAGE_NAME
+
 # https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
 steps:
   - id: build-maki-cameraman
@@ -5,8 +13,7 @@ steps:
     args:
       - build
       - "--no-cache"
-      - "-t"
-      - $_IMAGE_NAME
+      - "-t=$_IMAGE_NAME"
       # - "-f ./docker/Dockerfile"
       - .
 
@@ -28,10 +35,3 @@ steps:
       - "--image=$_IMAGE_NAME"
       - "--region=$_DEPLOY_REGION"
       - "--quiet"
-
-images:
-  - $_IMAGE_NAME
-
-options:
-  substitutionOption: ALLOW_LOOSE
-  dynamicSubstitutions: true
