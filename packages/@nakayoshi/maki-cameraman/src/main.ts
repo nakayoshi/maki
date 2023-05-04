@@ -1,36 +1,58 @@
 import express from "express";
+import * as OpenApiValidator from "express-openapi-validator";
 import { chromium } from "playwright-core";
-
-const THEATER_URL = process.env.THEATER_URL;
-if (!THEATER_URL) throw Error("THEATER_URLが読み込めません");
+import apiSpec from "@nakayoshi/maki-cameraman-spec";
+import swaggerUi from "swagger-ui-express";
+import { Methods } from "./adapters/generated/rest/v1/videos";
+import { CreateVideo } from "./app/create-video";
+import { StorageCloudStorage } from "./infra/storage-cloud-storage";
+import { VideoGeneratorPlaywright } from "./infra/video-generator-playwright";
 
 const app = express();
-app.get("/", async (req, res) => {
-  const text = req.query.text;
-  if (typeof text !== "string") {
-    res.status(404).send("not found");
-    return;
+app.use(express.json());
+
+app.use(
+  "/rest",
+  OpenApiValidator.middleware({
+    apiSpec: require.resolve("@nakayoshi/maki-cameraman-spec"),
+    validateApiSpec: true,
+    validateRequests: true,
+    validateResponses: false,
+  })
+);
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(apiSpec));
+
+app.post("/rest/v1/videos", async (req, res) => {
+  const body = req.body as Methods["post"]["reqBody"];
+
+  if (body.type === "YUKKURI") {
+    res.status(501).send("not implemented");
   }
 
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({
-    recordVideo: { dir: "./videos/", size: { width: 1920, height: 1080 } },
-  });
+  if (body.type === "RANKING") {
+    res.status(501).send("not implemented");
+  }
 
-  const url = new URL(THEATER_URL);
-  url.search = new URLSearchParams({
-    text,
-  }).toString();
+  if (body.type === "TEXT") {
+    const storage = new StorageCloudStorage("maki-cameraman");
+    const videoGenerator = new VideoGeneratorPlaywright(
+      process.env.THEATER_URL as string,
+      "./videos/",
+      { width: 1920, height: 1080 }
+    );
 
-  await page.goto(url.toString());
+    const createVideo = new CreateVideo(storage, videoGenerator);
+    const url = await createVideo.invoke({
+      type: "TEXT",
+      text: body.text,
+    });
 
-  await page.waitForLoadState("networkidle");
-  await browser.close();
-
-  console.debug(`[ finished ] query: ${text}`);
-  res.send({ result: await page.video()?.path() });
+    res.send({ url } as Methods["post"]["resBody"]);
+  }
 });
 
-console.debug("started.");
 const port = Number(process.env.PORT);
-app.listen(port);
+app.listen(port, (): void => {
+  console.log(`Server is ready at ${port}`);
+});
