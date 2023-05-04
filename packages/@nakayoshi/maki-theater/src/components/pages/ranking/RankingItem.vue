@@ -28,7 +28,7 @@ const image = "url(" + props.image_url + ")";
 
 <style scoped>
 .card {
-  width: auto;
+  width: 525px;
   height: 1080px;
   margin: 10px;
   overflow: hidden;
@@ -72,5 +72,6 @@ const image = "url(" + props.image_url + ")";
   font-size: 110px;
   font-weight: bold;
   background-color: darkgray;
+  width: 525pxß;
 }
 </style>
