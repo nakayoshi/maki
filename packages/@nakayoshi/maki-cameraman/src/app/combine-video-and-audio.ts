@@ -30,8 +30,8 @@ export class CombineVideoAndAudio {
       .input(audioPath)
       .outputOption("-map 0:v")
       .outputOption("-map 1:a")
-      .videoFilters(`fade=out:st=${fadeStartSec}:d=${fadeLength}`) // 動画の開始位置から75秒でフェードアウト開始, 4秒間かけてフェードアウト
-      .audioFilters(`afade=out:st=${fadeStartSec}:d=${fadeLength}`) // 動画の開始位置から75秒でフェードアウト開始, 4秒間かけてフェードアウト
+      .videoFilters(`fade=out:st=${fadeStartSec}:d=${fadeLength}`) // 動画の開始位置からfadeStartSec秒で映像のフェードアウト開始, 4秒間かけてフェードアウト
+      .audioFilters(`afade=out:st=${fadeStartSec}:d=${fadeLength}`) // 動画の開始位置からfadeStartSec秒で音声のフェードアウト開始, 4秒間かけてフェードアウト
       .outputOption(`-t ${videoDuration}`)
       .save(outputFilePath);
   }
