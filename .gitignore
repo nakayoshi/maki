@@ -59,3 +59,4 @@ typings/
 .envrc
 
 dist
+storybook-static
