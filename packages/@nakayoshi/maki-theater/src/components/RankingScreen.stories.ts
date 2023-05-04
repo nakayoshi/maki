@@ -12,7 +12,7 @@ export default meta;
 
 type Ranking = StoryObj<typeof meta>;
 
-const demo_list = [
+const demoList = [
   {
     rank: 10,
     title: "掃除当番争い",
@@ -77,6 +77,6 @@ const demo_list = [
 
 export const Demo: Ranking = {
   args: {
-    list: demo_list,
+    list: demoList,
   },
 };
