@@ -13,7 +13,9 @@ app.get("/", async (req, res) => {
   }
 
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const page = await browser.newPage({
+    recordVideo: { dir: "./videos/", size: { width: 1920, height: 1080 } },
+  });
 
   const url = new URL(THEATER_URL);
   url.search = new URLSearchParams({
@@ -22,17 +24,13 @@ app.get("/", async (req, res) => {
 
   await page.goto(url.toString());
 
-  const receivedTitle = await page.locator("h1").textContent();
-
+  await page.waitForLoadState("networkidle");
   await browser.close();
 
-  if (receivedTitle !== null) {
-    console.debug(`[ finished ] query: ${text}`);
-    res.send({ result: receivedTitle });
-    return;
-  }
-  res.send({ result: "" });
+  console.debug(`[ finished ] query: ${text}`);
+  res.send({ result: await page.video()?.path() });
 });
 
+console.debug("started.");
 const port = Number(process.env.PORT);
 app.listen(port);
