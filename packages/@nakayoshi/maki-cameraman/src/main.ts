@@ -43,13 +43,16 @@ app.post("/rest/v1/videos", async (req, res) => {
       path.join(__dirname, "../videos/"),
       { width: 1920, height: 1080 }
     );
-
     const combineVideoAndAudio = new CombineVideoAndAudioFfmpeg();
 
     const createVideo = new CreateVideo(
       storage,
       videoGenerator,
-      combineVideoAndAudio
+      combineVideoAndAudio,
+      {
+        audioPath: pathOfShiningStar,
+        outputDir: path.join(__dirname, "../videos/"),
+      }
     );
     const url = await createVideo.invoke({
       type: "RANKING",
@@ -71,13 +74,15 @@ app.post("/rest/v1/videos", async (req, res) => {
     const createVideo = new CreateVideo(
       storage,
       videoGenerator,
-      combineVideoAndAudio
+      combineVideoAndAudio,
+      {
+        audioPath: pathOfShiningStar,
+        outputDir: path.join(__dirname, "../videos/"),
+      }
     );
     const url = await createVideo.invoke({
       type: "TEXT",
       text: body.text,
-      audioPath: pathOfShiningStar,
-      outputDir: path.join(__dirname, "../videos/"),
     });
 
     res.send({ url } as Methods["post"]["resBody"]);

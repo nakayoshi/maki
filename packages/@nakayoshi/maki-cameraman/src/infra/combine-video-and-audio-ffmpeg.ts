@@ -36,6 +36,12 @@ export class CombineVideoAndAudioFfmpeg implements ICombineVideoAndAudio {
         .audioFilters(`afade=out:st=${fadeStartSec}:d=${fadeLength}`) // 動画の開始位置からfadeStartSec秒で音声のフェードアウト開始, fadeLength秒間かけてフェードアウト
         .outputOption(`-t ${videoDuration}`)
         .save(outputFilePath)
+        .on("progress", (progress) => {
+          console.info("Processing: " + progress.percent + "% done");
+        })
+        .on("error", (err) => {
+          reject(err);
+        })
         .on("end", () => {
           resolve();
         });

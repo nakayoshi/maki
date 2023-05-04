@@ -4,11 +4,14 @@ import { ICombineVideoAndAudio } from "./combine-video-and-audio";
 import { randomUUID } from "crypto";
 import path from "path";
 
+export interface CreateVideoOptions {
+  readonly audioPath: string;
+  readonly outputDir: string;
+}
+
 export interface CreateVideoParams {
   readonly type: "TEXT";
   readonly text: string;
-  readonly audioPath: string;
-  readonly outputDir: string;
 }
 
 export interface CreateRankingVideoParams {
@@ -20,7 +23,8 @@ export class CreateVideo {
   constructor(
     private readonly storage: IStorage,
     private readonly videoGenerator: IVideoGenerator,
-    private readonly combineVideoAndAudio: ICombineVideoAndAudio
+    private readonly combineVideoAndAudio: ICombineVideoAndAudio,
+    private readonly options: CreateVideoOptions
   ) {}
 
   async invoke(
@@ -29,10 +33,13 @@ export class CreateVideo {
     if (params.type === "TEXT") {
       const videoFile = await this.videoGenerator.generate("text", params.text);
       const extname = path.extname(videoFile);
-      const outputPath = path.join(params.outputDir, randomUUID() + extname);
+      const outputPath = path.join(
+        this.options.outputDir,
+        randomUUID() + extname
+      );
       await this.combineVideoAndAudio.combine(
         videoFile,
-        params.audioPath,
+        this.options.audioPath,
         outputPath
       );
       const file = await this.storage.upload(outputPath);
@@ -45,7 +52,17 @@ export class CreateVideo {
         "ranking",
         params.items
       );
-      const file = await this.storage.upload(videoFile);
+      const extname = path.extname(videoFile);
+      const outputPath = path.join(
+        this.options.outputDir,
+        randomUUID() + extname
+      );
+      await this.combineVideoAndAudio.combine(
+        videoFile,
+        this.options.audioPath,
+        outputPath
+      );
+      const file = await this.storage.upload(outputPath);
 
       return `https://storage.googleapis.com/${file.bucket}/${file.filename}`;
     }
