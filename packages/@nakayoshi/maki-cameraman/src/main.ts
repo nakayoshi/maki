@@ -33,5 +33,6 @@ app.get("/", async (req, res) => {
   res.send({ result: await page.video()?.path() });
 });
 
-app.listen(3000);
 console.debug("started.");
+const port = Number(process.env.PORT);
+app.listen(port);
