@@ -5,21 +5,21 @@ const props = defineProps({
   title: String,
   description: String,
   rank: Number,
-  image_url: String,
+  imageUrl: String,
 });
 
-const image = "url(" + props.image_url + ")";
+const image = "url(" + props.imageUrl + ")";
 </script>
 
 <template>
   <div class="card">
-    <div class="card__imgframe"></div>
+    <div class="card__img-frame"></div>
     <div class="card__rank">第{{ rank }}位</div>
-    <div class="card__textbox">
-      <div class="card__titletext">
+    <div class="card__text-box">
+      <div class="card__title-text">
         {{ title }}
       </div>
-      <div class="card__overviewtext">
+      <div class="card__overview-text">
         {{ description }}
       </div>
     </div>
@@ -35,22 +35,22 @@ const image = "url(" + props.image_url + ")";
   background-color: black;
   padding: 0%;
 }
-.card__imgframe {
+.card__img-frame {
   width: 525px;
   height: 490px;
   background: v-bind(image);
   box-sizing: border-box;
 }
-.card__textbox {
+.card__text-box {
   width: 525px;
   height: auto;
   padding: 20px 18px;
   box-sizing: border-box;
 }
-.card__textbox > * + * {
+.card__text-box > * + * {
   margin-top: 10px;
 }
-.card__titletext {
+.card__title-text {
   font-size: 20px;
   font-weight: bold;
   line-height: 125%;
@@ -59,7 +59,7 @@ const image = "url(" + props.image_url + ")";
   font-size: 30px;
   margin-top: 20%;
 }
-.card__overviewtext {
+.card__overview-text {
   font-size: 12px;
   line-height: 150%;
   color: white;
