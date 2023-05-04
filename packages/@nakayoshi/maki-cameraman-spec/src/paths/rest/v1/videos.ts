@@ -39,9 +39,17 @@ const VideoRanking = z.object({
   items: RankingItem.array(),
 });
 
+// =================
+
+const VideoText = z.object({
+  type: z.literal("TEXT"),
+  text: z.string(),
+});
+
 export const Request = z.discriminatedUnion("type", [
   VideoYukkuri,
   VideoRanking,
+  VideoText,
 ]);
 
 registry.registerPath({
