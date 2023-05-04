@@ -17,6 +17,6 @@ export const Demo: Ranking = {
     rank: 10,
     title: "掃除当番争い",
     description: "掃除の当番決めでいつも言い合いに",
-    url: "https://placehold.jp/300x300.png",
+    imageUrl: "https://placehold.jp/300x300.png",
   },
 };
