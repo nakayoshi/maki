@@ -22,7 +22,6 @@ RUN pnpm build
 
 FROM dependencies as runtime
 
-ENV THEATER_URL https://maki-sandy.vercel.app
 WORKDIR /app/packages/@nakayoshi/maki-cameraman/
 COPY --from=builder /build/dist ./dist
 CMD [ "tini", "node", "./dist/main.js" ]
