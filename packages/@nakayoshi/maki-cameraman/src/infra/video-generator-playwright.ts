@@ -6,6 +6,13 @@ type VideoSize = {
   readonly height: number;
 };
 
+interface ScenarioEventDetail {
+  rank: number;
+  title: string;
+  description: string;
+  url: string;
+}
+
 export class VideoGeneratorPlaywright implements IVideoGenerator {
   constructor(
     private readonly theaterUrl: string,
@@ -59,15 +66,32 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
           },
         },
       });
+
+      await page.setViewportSize({
+        width: this.videoSize.width,
+        height: this.videoSize.height,
+      });
+
       await page.goto(this.theaterUrl);
 
+      await page.exposeFunction("__cameraman__finish", () => {
+        browser.close();
+      });
+
+      const detail: ScenarioEventDetail[] = params.map((item) => ({
+        rank: item.rank,
+        title: item.title,
+        description: item.description,
+        url: item.imageUrl,
+      }));
+
       // theaterのカスタムイベント`InjectScenario`をdispatchする
-      await page.evaluateHandle((p) => {
+      await page.evaluateHandle((detail) => {
         const customEvent = new CustomEvent("InjectScenario", {
-          detail: p,
+          detail,
         });
         window.dispatchEvent(customEvent);
-      }, params);
+      }, detail);
 
       await page.waitForLoadState("networkidle");
 
@@ -75,9 +99,9 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
       if (video == null) {
         throw new Error("Could not save video");
       }
+
       const videoPath = await video.path();
-      await Promise.allSettled([browser.close(), video.saveAs(videoPath)]);
-      // await video.saveAs(videoPath);
+      await video.saveAs(videoPath);
 
       return videoPath;
     }
