@@ -36,6 +36,9 @@ console.log(props.list);
       v-bind:rank="item.rank"
       v-bind:image_url="item.url"
     />
+    <audio src="/public/maou_14_shining_star.ogg" autoplay loop>
+      あなたのブラウザーは <code>audio</code>要素をサポートしていません。
+    </audio>
   </div>
 </template>
 
