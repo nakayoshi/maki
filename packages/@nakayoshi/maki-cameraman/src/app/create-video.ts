@@ -32,10 +32,9 @@ export class CreateVideo {
   ): Promise<string> {
     if (params.type === "TEXT") {
       const videoFile = await this.videoGenerator.generate("text", params.text);
-      const extname = path.extname(videoFile);
       const outputPath = path.join(
         this.options.outputDir,
-        randomUUID() + extname
+        randomUUID() + ".mp4" // 出力形式はmp4固定にする
       );
       await this.combineVideoAndAudio.combine(
         videoFile,
@@ -52,10 +51,9 @@ export class CreateVideo {
         "ranking",
         params.items
       );
-      const extname = path.extname(videoFile);
       const outputPath = path.join(
         this.options.outputDir,
-        randomUUID() + extname
+        randomUUID() + ".mp4" // 出力形式はmp4固定にする
       );
       await this.combineVideoAndAudio.combine(
         videoFile,
