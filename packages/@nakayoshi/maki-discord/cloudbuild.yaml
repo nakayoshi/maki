@@ -3,10 +3,18 @@ options:
   substitutionOption: ALLOW_LOOSE
   dynamicSubstitutions: true
 
+# availableSecrets:
+#   secretManager:
+#     - versionName: projects/$PROJECT_ID/secrets/${_MAKI_DISCORD_TOKEN_KEY}/versions/latest
+#       env: DISCORD_TOKEN
+#     - versionName: projects/$PROJECT_ID/secrets/${_MAKI_OPENAI_API_KEY}/versions/latest
+#       env: OPENAI_API_KEY
+
 images:
   - $_IMAGE_NAME
 
 # https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
+# https://cloud.google.com/build/docs/securing-builds/use-secrets?hl=ja#access-utf8-secrets
 steps:
   - id: build-maki-discord
     name: docker
@@ -22,3 +30,16 @@ steps:
     args:
       - push
       - $_IMAGE_NAME
+
+  - id: deploy-maki-discord
+    name: gcloud
+    # secretEnv:
+    #   - DISCORD_TOKEN
+    #   - OPENAI_API_KEY
+    args:
+      - compute
+      - instances
+      - update-container
+      - $_SERVICE_NAME
+      - "--container-image=$_IMAGE_NAME"
+      - "--quiet"
