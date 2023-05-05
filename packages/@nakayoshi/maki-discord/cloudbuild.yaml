@@ -16,7 +16,7 @@ images:
 # https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
 # https://cloud.google.com/build/docs/securing-builds/use-secrets?hl=ja#access-utf8-secrets
 steps:
-  - id: build-maki-discord
+  - id: build
     name: docker
     args:
       - build
@@ -25,13 +25,13 @@ steps:
       - "-f=./packages/@nakayoshi/maki-discord/Dockerfile"
       - .
 
-  - id: push-maki-discord
+  - id: push
     name: docker
     args:
       - push
       - $_IMAGE_NAME
 
-  - id: deploy-maki-discord
+  - id: deploy
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
     entrypoint: gcloud
     # secretEnv:
