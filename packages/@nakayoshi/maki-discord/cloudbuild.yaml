@@ -32,7 +32,8 @@ steps:
       - $_IMAGE_NAME
 
   - id: deploy-maki-discord
-    name: gcloud
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: gcloud
     # secretEnv:
     #   - DISCORD_TOKEN
     #   - OPENAI_API_KEY
