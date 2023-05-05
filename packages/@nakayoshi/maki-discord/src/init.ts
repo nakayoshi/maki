@@ -1,9 +1,22 @@
-import { REST, Routes } from "discord.js";
+import {
+  REST,
+  Routes,
+  ApplicationCommandOptionType,
+  RESTPostAPIApplicationCommandsJSONBody,
+} from "discord.js";
 
-const commands = [
+const commands: RESTPostAPIApplicationCommandsJSONBody[] = [
   {
     name: "ranking",
     description: "ランキング動画を生成",
+    options: [
+      {
+        type: ApplicationCommandOptionType.String,
+        name: "keyword",
+        description: "生成する動画のキーワードです",
+        required: true,
+      },
+    ],
   },
 ];
 
