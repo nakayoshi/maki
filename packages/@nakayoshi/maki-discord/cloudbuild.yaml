@@ -14,7 +14,7 @@ steps:
       - build
       - "--no-cache"
       - "-t=$_IMAGE_NAME"
-      - "-f=./Dockerfile2"
+      - "-f=./Dockerfile"
       - .
 
   - id: push-maki-discord
