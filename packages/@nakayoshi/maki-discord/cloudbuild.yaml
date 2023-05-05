@@ -43,4 +43,5 @@ steps:
       - update-container
       - $_SERVICE_NAME
       - "--container-image=$_IMAGE_NAME"
+      - "--zone=$_DEPLOY_ZONE"
       - "--quiet"
