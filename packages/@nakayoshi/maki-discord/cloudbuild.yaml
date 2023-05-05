@@ -22,7 +22,7 @@ steps:
       - build
       - "--no-cache"
       - "-t=$_IMAGE_NAME"
-      - "-f=./Dockerfile"
+      - "-f=./packages/@nakayoshi/maki-discord/Dockerfile"
       - .
 
   - id: push-maki-discord
