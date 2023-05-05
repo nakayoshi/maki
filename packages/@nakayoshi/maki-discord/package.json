@@ -1,0 +1,32 @@
+{
+  "name": "@nakayoshi/maki-discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/main.js",
+  "scripts": {
+    "codegen": "rimraf ./src/generated && openapi2aspida",
+    "build": "pnpm run codegen && tsc",
+    "start": "node ./dist/main.js",
+    "test": "exit 0",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aspida/axios": "^1.12.0",
+    "@nakayoshi/maki-cameraman-spec": "workspace:^",
+    "aspida": "^1.12.0",
+    "axios": "^1.4.0",
+    "discord.js": "^14.10.2",
+    "openai": "^3.2.1",
+    "openapi2aspida": "^0.21.0",
+    "outdent": "^0.8.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
+}
