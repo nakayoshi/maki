@@ -6,8 +6,7 @@ COPY . .
 
 RUN npm install -g @pnpm/exe@^8.4.0
 
-RUN cd ./packages/@nakayoshi/maki-cameraman/ \
- && pnpm install -r --frozen-lockfile --prod
+RUN pnpm install -r --frozen-lockfile --prod
 
 RUN apt-get update \
  && apt-get install -y tini
