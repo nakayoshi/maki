@@ -3,6 +3,7 @@ import { createApplicationCommands } from "./init";
 import { VideoBuilderCameraman } from "./video-builder/video-builder-cameraman";
 import { ScenarioBuilderOpenAI } from "./scenario-builder/scenario-builder-openai";
 import { Configuration, OpenAIApi } from "openai";
+import { outdent } from "outdent";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -22,19 +23,29 @@ client.on("interactionCreate", async (interaction) => {
     const keyword = interaction.options.getString("keyword");
     await interaction.reply(`${keyword}のランキングを作成中...`);
 
-    const openai = new OpenAIApi(
-      new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-        organization: process.env.OPENAI_ORGANIZATION,
-      })
-    );
-    const scenarioBuilder = new ScenarioBuilderOpenAI(openai);
-    const videoGenerator = new VideoBuilderCameraman(scenarioBuilder);
-    if (keyword == null) {
-      throw new Error("keyword is null");
+    try {
+      const openai = new OpenAIApi(
+        new Configuration({
+          apiKey: process.env.OPENAI_API_KEY,
+          organization: process.env.OPENAI_ORGANIZATION,
+        })
+      );
+      const scenarioBuilder = new ScenarioBuilderOpenAI(openai);
+      const videoGenerator = new VideoBuilderCameraman(scenarioBuilder);
+      if (keyword == null) {
+        throw new Error("keyword is null");
+      }
+      const url = await videoGenerator.buildRanking(keyword);
+      await interaction.channel?.send({ files: [url] });
+    } catch (e) {
+      console.error(e);
+      await interaction.channel?.send(outdent`
+      エラーが発生しました
+      \`\`\`
+      ${e}
+      \`\`\`
+      `);
     }
-    const url = await videoGenerator.buildRanking(keyword);
-    await interaction.channel?.send({ files: [url] });
   }
 });
 

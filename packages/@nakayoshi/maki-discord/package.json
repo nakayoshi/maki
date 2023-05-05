@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
-    "codegen": "rimraf ./src/adapters/generated && openapi2aspida",
+    "codegen": "rimraf ./src/generated && openapi2aspida",
     "build": "pnpm run codegen && tsc",
     "start": "node ./dist/main.js",
     "test": "exit 0",
