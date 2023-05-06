@@ -22,7 +22,7 @@ client.on("interactionCreate", async (interaction) => {
 
     const prompt = interaction.options.getString("prompt");
     const model = interaction.options.getString("model") ?? undefined;
-    await interaction.reply(`${prompt}のランキングを作成中...`);
+    await interaction.reply(`「${prompt}」のランキングを作成中...`);
 
     try {
       if (prompt == null) {
@@ -43,7 +43,11 @@ client.on("interactionCreate", async (interaction) => {
           model,
         },
       });
-      await interaction.channel?.send({ files: [video.url] });
+
+      await interaction.channel?.send(outdent`
+      「${prompt}」のランキング動画を作成しました
+      ${video.url}
+      `);
     } catch (e) {
       console.error(e);
       await interaction.channel?.send(outdent`
