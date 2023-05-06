@@ -32,6 +32,26 @@ importers:
         specifier: ^2.8.8
         version: 2.8.8
 
+  packages/@nakayoshi/maki-api: {}
+
+  packages/@nakayoshi/maki-api-spec:
+    dependencies:
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^4.6.0
+        version: 4.6.0(zod@3.21.4)
+      glob:
+        specifier: ^10.2.2
+        version: 10.2.2
+      mkdirp:
+        specifier: ^3.0.1
+        version: 3.0.1
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
+
   packages/@nakayoshi/maki-cameraman:
     dependencies:
       '@google-cloud/storage':
