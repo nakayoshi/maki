@@ -11,7 +11,7 @@ options:
 #       env: OPENAI_API_KEY
 
 images:
-  - $_IMAGE_NAME
+  - $_IMAGE_NAME:$COMMIT_SHA
 
 # https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
 # https://cloud.google.com/build/docs/securing-builds/use-secrets?hl=ja#access-utf8-secrets
@@ -21,7 +21,7 @@ steps:
     args:
       - build
       - "--no-cache"
-      - "-t=$_IMAGE_NAME"
+      - "-t=$_IMAGE_NAME:$COMMIT_SHA"
       - "-f=./packages/@nakayoshi/maki-discord/Dockerfile"
       - .
 
@@ -29,7 +29,7 @@ steps:
     name: docker
     args:
       - push
-      - $_IMAGE_NAME
+      - $_IMAGE_NAME:$COMMIT_SHA
 
   - id: deploy
     name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
@@ -42,6 +42,6 @@ steps:
       - instances
       - update-container
       - $_SERVICE_NAME
-      - "--container-image=$_IMAGE_NAME"
+      - "--container-image=$_IMAGE_NAME:$COMMIT_SHA"
       - "--zone=$_DEPLOY_ZONE"
       - "--quiet"
