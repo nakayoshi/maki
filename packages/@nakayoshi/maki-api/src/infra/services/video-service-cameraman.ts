@@ -27,6 +27,7 @@ export class VideoServiceCameraman implements IVideoService {
     const result = await this.api.rest.v1.videos.$post({
       body: {
         type: "RANKING",
+        title: params.title,
         items: params.items.map((item) => ({
           rank: item.rank,
           title: item.title,
