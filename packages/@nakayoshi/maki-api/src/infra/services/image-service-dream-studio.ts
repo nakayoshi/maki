@@ -23,11 +23,13 @@ export class ImageServiceDreamStudio implements IImageService {
   async createImage(prompt: string): Promise<string> {
     const result = await generateAsync({
       apiKey: this.apiKey,
+      engine: "stable-diffusion-512-v2-1",
       prompt,
       outDir: this.outDir,
       width: 64 * 5,
       height: 64 * 5,
       samples: 1,
+      steps: 10,
     });
 
     if (result == null) {
