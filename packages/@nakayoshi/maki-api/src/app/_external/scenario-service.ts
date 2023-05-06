@@ -16,5 +16,9 @@ export type ScenarioRankingItem = z.infer<typeof ScenarioRankingItem>;
 export type ScenarioRanking = z.infer<typeof ScenarioRanking>;
 
 export interface IScenarioService {
-  createScenario(type: "ranking", prompt: string): Promise<ScenarioRanking>;
+  createScenario(
+    type: "ranking",
+    prompt: string,
+    model?: string
+  ): Promise<ScenarioRanking>;
 }

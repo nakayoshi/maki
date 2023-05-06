@@ -43,8 +43,7 @@ app.post("/rest/v1/videos", async (req, res) => {
         apiKey: process.env.OPENAI_API_KEY,
         organization: process.env.OPENAI_ORGANIZATION,
       })
-    ),
-    "gpt-3.5-turbo-0301"
+    )
   );
 
   const imageOutDir = path.join(os.tmpdir(), "maki");

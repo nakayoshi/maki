@@ -23,6 +23,7 @@ export const createVideo = async (
   );
   const result = await useCase.invoke({
     prompt: body.prompt,
+    model: body.model,
   });
   return {
     url: result.videoUrl,

@@ -9,6 +9,7 @@ import {
 
 export type CreateVideoParams = {
   readonly prompt: string;
+  readonly model?: string;
 };
 
 export type CreateVideoResult = {
@@ -25,11 +26,12 @@ export class CreateVideo {
   ) {}
 
   async invoke(params: CreateVideoParams): Promise<CreateVideoResult> {
-    const { prompt } = params;
+    const { prompt, model } = params;
 
     const scenario = await this.scenarioService.createScenario(
       "ranking",
-      prompt
+      prompt,
+      model
     );
 
     const entries = await Promise.all(
