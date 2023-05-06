@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 
-const props = defineProps<{
-  title: string;
-  description: string;
-  rank: number;
-  imageUrl: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    description: string;
+    rank: number;
+    imageUrl: string;
+    width?: string;
+  }>(),
+  { width: "525px" }
+);
 </script>
 
 <template>
@@ -29,7 +33,7 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
-  width: 525px;
+  width: v-bind(props.width);
   height: 100%;
   overflow: hidden;
   background-color: black;

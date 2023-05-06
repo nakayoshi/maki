@@ -1,5 +1,5 @@
-import { InjectScenarioEvent } from "./models/scenarioEvent";
-import { RankingItem } from "./models/data/RankingItem";
+import { InjectScenarioEvent } from "./models/inject-scenario-event";
+import { RankingItem } from "./models/scenario";
 
 declare global {
   interface WindowEventMap {
