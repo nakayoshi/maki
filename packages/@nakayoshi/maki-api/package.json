@@ -2,10 +2,12 @@
   "name": "@nakayoshi/maki-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/main.js",
   "scripts": {
     "codegen": "rimraf ./src/infra/generated && openapi2aspida -c ./aspida/cameraman.cjs && rimraf ./src/adapters/generated && openapi2aspida -c ./aspida/api.cjs",
     "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts",
+    "build": "tsc",
+    "start": "node ./dist/main.js",
     "test": "exit 0"
   },
   "keywords": [],
