@@ -1,4 +1,4 @@
-import { IVideoGenerator, RankingItem } from "../app/video-generator";
+import { IVideoGenerator, ScenarioRanking } from "../app/video-generator";
 import { chromium } from "playwright-core";
 
 type VideoSize = {
@@ -21,9 +21,9 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
   ) {}
 
   async generate(type: "text", text: string): Promise<string>;
-  async generate(type: "ranking", items: RankingItem[]): Promise<string>;
+  async generate(type: "ranking", items: ScenarioRanking): Promise<string>;
   async generate(
-    ...args: ["text", string] | ["ranking", RankingItem[]]
+    ...args: ["text", string] | ["ranking", ScenarioRanking]
   ): Promise<string> {
     const [type, params] = args;
 
@@ -78,7 +78,7 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
         browser.close();
       });
 
-      const detail: ScenarioEventDetail[] = params.map((item) => ({
+      const detail: ScenarioEventDetail[] = params.items.map((item) => ({
         rank: item.rank,
         title: item.title,
         description: item.description,
@@ -86,12 +86,18 @@ export class VideoGeneratorPlaywright implements IVideoGenerator {
       }));
 
       // theaterのカスタムイベント`InjectScenario`をdispatchする
-      await page.evaluateHandle((detail) => {
-        const customEvent = new CustomEvent("InjectScenario", {
-          detail,
-        });
-        window.dispatchEvent(customEvent);
-      }, detail);
+      await page.evaluateHandle(
+        ([title, detail]) => {
+          const customEvent = new CustomEvent("InjectScenario", {
+            detail: {
+              title: title,
+              items: detail,
+            },
+          });
+          window.dispatchEvent(customEvent);
+        },
+        [params.title, detail] as const
+      );
 
       await page.waitForLoadState("networkidle");
 

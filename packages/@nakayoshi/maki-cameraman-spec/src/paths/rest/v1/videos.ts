@@ -36,6 +36,7 @@ const RankingItem = z.object({
 
 const VideoRanking = z.object({
   type: z.literal("RANKING"),
+  title: z.string(),
   items: RankingItem.array(),
 });
 

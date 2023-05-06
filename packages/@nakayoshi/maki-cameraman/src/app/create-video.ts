@@ -16,7 +16,8 @@ export interface CreateVideoParams {
 
 export interface CreateRankingVideoParams {
   readonly type: "RANKING";
-  readonly items: RankingItem[];
+  readonly title: string;
+  readonly items: readonly RankingItem[];
 }
 
 export class CreateVideo {
@@ -47,10 +48,10 @@ export class CreateVideo {
     }
 
     if (params.type === "RANKING") {
-      const videoFile = await this.videoGenerator.generate(
-        "ranking",
-        params.items
-      );
+      const videoFile = await this.videoGenerator.generate("ranking", {
+        title: params.title,
+        items: params.items,
+      });
       const outputPath = path.join(
         this.options.outputDir,
         randomUUID() + ".mp4" // 出力形式はmp4固定にする

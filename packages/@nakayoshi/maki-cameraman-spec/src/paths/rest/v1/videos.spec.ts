@@ -23,6 +23,7 @@ test("parses", () => {
 test("ランキング動画", () => {
   const result = Request.safeParse({
     type: "RANKING",
+    title: "ランキング",
     items: [
       {
         rank: 10,

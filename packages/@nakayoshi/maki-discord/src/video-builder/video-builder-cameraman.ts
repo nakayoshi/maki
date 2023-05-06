@@ -26,6 +26,7 @@ export class VideoBuilderCameraman implements IVideoBuilder {
     const result = await this.api.rest.v1.videos.$post({
       body: {
         type: "RANKING",
+        title: keyword,
         items: scenario,
       },
     });

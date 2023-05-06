@@ -56,6 +56,7 @@ app.post("/rest/v1/videos", async (req, res) => {
     );
     const url = await createVideo.invoke({
       type: "RANKING",
+      title: body.title,
       items: body.items,
     });
 
