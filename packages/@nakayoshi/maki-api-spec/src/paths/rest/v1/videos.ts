@@ -4,7 +4,7 @@ import { Video } from "../../../components/schemas/video";
 
 const CreateVideoRankingBody = z.object({
   type: z.literal("RANKING"),
-  keyword: z.string(),
+  prompt: z.string(),
 });
 
 registry.registerPath({
