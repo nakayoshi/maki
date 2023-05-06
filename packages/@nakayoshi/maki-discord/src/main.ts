@@ -1,9 +1,9 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
+import axios from "axios";
 import { createApplicationCommands } from "./init";
-import { VideoBuilderCameraman } from "./video-builder/video-builder-cameraman";
-import { ScenarioBuilderOpenAI } from "./scenario-builder/scenario-builder-openai";
-import { Configuration, OpenAIApi } from "openai";
+import aspida from "@aspida/axios";
 import { outdent } from "outdent";
+import api from "./generated/$api";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -20,23 +20,34 @@ client.on("interactionCreate", async (interaction) => {
       throw new Error("channel is null");
     }
 
-    const keyword = interaction.options.getString("keyword");
-    await interaction.reply(`${keyword}のランキングを作成中...`);
+    const prompt = interaction.options.getString("prompt");
+    const model = interaction.options.getString("model") ?? undefined;
+    await interaction.reply(`「${prompt}」のランキングを作成中...`);
 
     try {
-      const openai = new OpenAIApi(
-        new Configuration({
-          apiKey: process.env.OPENAI_API_KEY,
-          organization: process.env.OPENAI_ORGANIZATION,
+      if (prompt == null) {
+        throw new Error("prompt is null");
+      }
+
+      const client = api(
+        aspida(axios, {
+          baseURL: "https://api.maki.nakayoshi.dance",
+          timeout: 1000 * 60 * 10,
         })
       );
-      const scenarioBuilder = new ScenarioBuilderOpenAI(openai);
-      const videoGenerator = new VideoBuilderCameraman(scenarioBuilder);
-      if (keyword == null) {
-        throw new Error("keyword is null");
-      }
-      const url = await videoGenerator.buildRanking(keyword);
-      await interaction.channel?.send({ files: [url] });
+
+      const video = await client.rest.v1.videos.$post({
+        body: {
+          type: "RANKING",
+          prompt,
+          model,
+        },
+      });
+
+      await interaction.channel?.send(outdent`
+      「${prompt}」のランキング動画を作成しました
+      ${video.url}
+      `);
     } catch (e) {
       console.error(e);
       await interaction.channel?.send(outdent`

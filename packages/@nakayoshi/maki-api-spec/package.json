@@ -1,0 +1,19 @@
+{
+  "name": "@nakayoshi/maki-api-spec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/openapi.json",
+  "scripts": {
+    "build": "bash build.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^4.6.0",
+    "glob": "^10.2.2",
+    "mkdirp": "^3.0.1",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  }
+}

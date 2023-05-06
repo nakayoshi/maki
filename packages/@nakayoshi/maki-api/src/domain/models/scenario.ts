@@ -8,5 +8,12 @@ export const RankingItem = z.object({
 });
 export type RankingItem = z.infer<typeof RankingItem>;
 
-export const Scenario = z.array(RankingItem);
+export const Ranking = z.array(RankingItem);
+export type Ranking = z.infer<typeof Ranking>;
+
+export const Scenario = z.object({
+  title: z.string(),
+  items: z.array(RankingItem),
+});
+
 export type Scenario = z.infer<typeof Scenario>;
