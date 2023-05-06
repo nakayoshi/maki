@@ -7,19 +7,17 @@ const props = defineProps<{
   rank: number;
   imageUrl: string;
 }>();
-
-const image = "url(" + props.imageUrl + ")";
 </script>
 
 <template>
   <div class="card">
-    <div class="card__img-frame"></div>
+    <img class="card__image" :src="props.imageUrl" :alt="title" />
     <div class="card__rank">第{{ rank }}位</div>
     <div class="card__text-box">
-      <div class="card__title-text">
+      <div class="card__title">
         {{ title }}
       </div>
-      <div class="card__overview-text">
+      <div class="card__description">
         {{ description }}
       </div>
     </div>
@@ -28,51 +26,58 @@ const image = "url(" + props.imageUrl + ")";
 
 <style scoped>
 .card {
+  display: flex;
+  flex-direction: column;
   flex: 1 0 auto;
   width: 525px;
-  height: 1080px;
-  margin: 10px;
+  height: 100%;
   overflow: hidden;
   background-color: black;
   padding: 0%;
 }
-.card__img-frame {
-  width: 525px;
-  height: 490px;
-  background: v-bind(image);
+
+.card__image {
+  flex: 0 0 auto;
   box-sizing: border-box;
+  width: 100%;
+  max-height: 490px;
 }
-.card__text-box {
-  width: 525px;
-  height: auto;
-  padding: 20px 18px;
-  box-sizing: border-box;
-}
-.card__text-box > * + * {
-  margin-top: 10px;
-}
-.card__title-text {
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 125%;
-  color: white;
-  text-align: center;
-  font-size: 30px;
-  margin-top: 20%;
-}
-.card__overview-text {
-  font-size: 12px;
-  line-height: 150%;
-  color: white;
-  text-align: center;
-  font-size: 50px;
-}
+
 .card__rank {
+  flex: 0 0 auto;
+  width: 100%;
   text-align: center;
   color: black;
   font-size: 110px;
   font-weight: bold;
   background-color: darkgray;
-  width: 525pxß;
+}
+
+.card__text-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+
+  flex: 1 0 auto;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.card__title {
+  font-weight: bold;
+  line-height: 1.25;
+  color: white;
+  text-align: center;
+  font-size: 48px;
+}
+
+.card__description {
+  font-size: 12px;
+  line-height: 150%;
+  color: white;
+  text-align: center;
+  font-size: 40px;
 }
 </style>

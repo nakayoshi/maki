@@ -58,6 +58,7 @@ onMounted(() => {
 <style scoped>
 .video-screen {
   display: flex;
+  gap: 8px;
   height: 1080px;
 }
 
