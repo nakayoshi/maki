@@ -1,5 +1,6 @@
 import express from "express";
 import apiSpec from "@nakayoshi/maki-api-spec";
+import os from "node:os";
 import * as OpenApiValidator from "express-openapi-validator";
 import swaggerUi from "swagger-ui-express";
 import { VideoServiceCameraman } from "./infra/services/video-service-cameraman";
@@ -45,7 +46,7 @@ app.post("/rest/v1/videos", async (req, res) => {
   );
   const imageService = new ImageServiceDreamStudio(
     process.env.DREAMSTUDIO_API_KEY as string,
-    "/tmp"
+    os.tmpdir()
   );
 
   try {
