@@ -49,6 +49,9 @@ importers:
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
+      '@types/mkdirp':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@types/node':
         specifier: ^18.16.3
         version: 18.16.3
@@ -67,6 +70,9 @@ importers:
       express-openapi-validator:
         specifier: ^5.0.4
         version: 5.0.4
+      mkdirp:
+        specifier: ^3.0.1
+        version: 3.0.1
       openai:
         specifier: ^3.2.1
         version: 3.2.1
@@ -3270,6 +3276,13 @@ packages:
 
   /@types/minimist@1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
+    dev: false
+
+  /@types/mkdirp@2.0.0:
+    resolution: {integrity: sha512-c/iUqMymAlxLAyIK3u5SzrwkrkyOdv1XDc91T+b5FsY7Jr6ERhUD19jJHOhPW4GD6tmN6mFEorfSdks525pwdQ==}
+    deprecated: This is a stub types definition. mkdirp provides its own type definitions, so you do not need this installed.
+    dependencies:
+      mkdirp: 3.0.1
     dev: false
 
   /@types/multer@1.4.7:

@@ -1,5 +1,7 @@
 import express from "express";
 import apiSpec from "@nakayoshi/maki-api-spec";
+import { mkdirp } from "mkdirp";
+import path from "node:path";
 import os from "node:os";
 import * as OpenApiValidator from "express-openapi-validator";
 import swaggerUi from "swagger-ui-express";
@@ -44,9 +46,13 @@ app.post("/rest/v1/videos", async (req, res) => {
     ),
     "gpt-3.5-turbo-0301"
   );
+
+  const imageOutDir = path.join(os.tmpdir(), "maki");
+  await mkdirp(imageOutDir);
+
   const imageService = new ImageServiceDreamStudio(
     process.env.DREAMSTUDIO_API_KEY as string,
-    os.tmpdir()
+    imageOutDir
   );
 
   try {
@@ -59,7 +65,8 @@ app.post("/rest/v1/videos", async (req, res) => {
       req.body
     );
     return res.json(response).status(200);
-  } catch {
+  } catch (error) {
+    logger.error("Fatal error", { error });
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });

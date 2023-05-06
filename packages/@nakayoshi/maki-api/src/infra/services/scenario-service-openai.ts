@@ -27,9 +27,9 @@ export class ScenarioServiceOpenAI implements IScenarioService {
       model: this.model,
       messages: [
         {
-          role: "system",
+          role: "user",
           content: outdent`
-          これからユーザーが言うテーマについて、ユーモア性のあるランキングを、短い説明文、長い説明文、画像生成用プロンプトとともに列挙してください
+          これから言うテーマについて、ユーモア性のあるランキングを、短い説明文、長い説明文、画像生成用プロンプトとともに列挙してください
 
           フォーマット：
           [{"rank": 1, "title": "短い説明文", "description": "長い説明文", "imagePrompt": "画像生成用プロンプト"}...]
@@ -39,11 +39,9 @@ export class ScenarioServiceOpenAI implements IScenarioService {
           ・文章はタメ口である
           ・短い説明は10字程度、長い説明は30字程度
           ・画像生成用プロンプトは、 DALL·E や Stable Diffusion などの画像生成AIで利用できるカンマ区切りの英文
-					`,
-        },
-        {
-          role: "user",
-          content: `テーマ：${prompt}`,
+
+          テーマ：${prompt}
+          `,
         },
       ],
     });
