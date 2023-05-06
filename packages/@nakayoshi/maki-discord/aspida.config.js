@@ -2,5 +2,5 @@
 module.exports = {
   input: "./src/generated",
   outputEachDir: false,
-  openapi: { inputFile: require.resolve("@nakayoshi/maki-cameraman-spec") },
+  openapi: { inputFile: require.resolve("@nakayoshi/maki-api-spec") },
 };

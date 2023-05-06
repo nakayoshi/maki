@@ -201,9 +201,9 @@ importers:
       '@aspida/axios':
         specifier: ^1.12.0
         version: 1.12.0
-      '@nakayoshi/maki-cameraman-spec':
+      '@nakayoshi/maki-api-spec':
         specifier: workspace:^
-        version: link:../maki-cameraman-spec
+        version: link:../maki-api-spec
       aspida:
         specifier: ^1.12.0
         version: 1.12.0
@@ -213,9 +213,6 @@ importers:
       discord.js:
         specifier: ^14.10.2
         version: 14.10.2
-      openai:
-        specifier: ^3.2.1
-        version: 3.2.1
       openapi2aspida:
         specifier: ^0.21.0
         version: 0.21.0

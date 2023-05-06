@@ -15,11 +15,10 @@
   "license": "ISC",
   "dependencies": {
     "@aspida/axios": "^1.12.0",
-    "@nakayoshi/maki-cameraman-spec": "workspace:^",
+    "@nakayoshi/maki-api-spec": "workspace:^",
     "aspida": "^1.12.0",
     "axios": "^1.4.0",
     "discord.js": "^14.10.2",
-    "openai": "^3.2.1",
     "openapi2aspida": "^0.21.0",
     "outdent": "^0.8.0",
     "rimraf": "^5.0.0",

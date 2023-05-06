@@ -12,9 +12,15 @@ const commands: RESTPostAPIApplicationCommandsJSONBody[] = [
     options: [
       {
         type: ApplicationCommandOptionType.String,
-        name: "keyword",
+        name: "prompt",
         description: "生成する動画のキーワードです",
         required: true,
+      },
+      {
+        type: ApplicationCommandOptionType.String,
+        name: "model",
+        description: "利用するLLMの識別子です",
+        required: false,
       },
     ],
   },
