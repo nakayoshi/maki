@@ -45,3 +45,15 @@ steps:
       - "--container-image=$_IMAGE_NAME"
       - "--zone=$_DEPLOY_ZONE"
       - "--quiet"
+
+  # https://stackoverflow.com/questions/62103365/how-to-deploy-container-to-gce-by-updating-container-image
+  - id: prune-docker-images
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: gcloud
+    args:
+      - compute
+      - ssh
+      - $_SERVICE_NAME
+      - "--zone=$_DEPLOY_ZONE"
+      - "--command=docker system prune -f -a"
+      - "--quiet"
