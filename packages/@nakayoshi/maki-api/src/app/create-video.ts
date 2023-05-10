@@ -51,7 +51,7 @@ export class CreateVideo {
       title: scenario.title,
       items: scenario.items.map((item, index) => ({
         rank: item.rank,
-        title: item.title,
+        title: item.name,
         description: item.description,
         imageUrl: imageUrls[index],
       })),

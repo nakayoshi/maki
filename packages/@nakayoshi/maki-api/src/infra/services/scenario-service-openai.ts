@@ -54,9 +54,16 @@ export class ScenarioServiceOpenAI implements IScenarioService {
       throw new Error("Failed to generate");
     }
 
+    const items = await neatCsv(csv, {
+      mapValues: ({ header, value }) => {
+        if (header === "rank") return Number(value);
+        return value;
+      },
+    });
+
     const scenario = ScenarioRanking.safeParse({
       title: prompt,
-      items: neatCsv(csv),
+      items,
     });
 
     this.logger.info("Parsed scenario", { prompt, scenario });
