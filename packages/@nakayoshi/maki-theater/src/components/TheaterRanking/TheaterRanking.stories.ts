@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/vue3";
 
-import RankingScreen from "./RankingScreen.vue";
+import TheaterRanking from "./TheaterRanking.vue";
 
 const meta = {
-  title: "App/RankingScreen",
-  component: RankingScreen,
+  title: "App/TheaterRanking",
+  component: TheaterRanking,
   tags: ["autodocs"],
-} satisfies Meta<typeof RankingScreen>;
+} satisfies Meta<typeof TheaterRanking>;
 
 export default meta;
 

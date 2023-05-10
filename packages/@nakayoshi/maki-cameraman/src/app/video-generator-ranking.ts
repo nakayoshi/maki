@@ -10,7 +10,6 @@ export type ScenarioRanking = {
   readonly items: readonly RankingItem[];
 };
 
-export interface IVideoGenerator {
-  generate(type: "text", text: string): Promise<string>;
-  generate(type: "ranking", items: ScenarioRanking): Promise<string>;
+export interface IRankingVideoGenerator {
+  generate(scenario: ScenarioRanking): Promise<string>;
 }

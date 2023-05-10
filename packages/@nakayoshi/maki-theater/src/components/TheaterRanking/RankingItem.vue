@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
-
 const props = withDefaults(
   defineProps<{
-    title: string;
-    description: string;
-    rank: number;
-    imageUrl: string;
-    width?: string;
+    readonly title: string;
+    readonly description: string;
+    readonly rank: number;
+    readonly imageUrl: string;
+    readonly width?: string;
   }>(),
   { width: "525px" }
 );
