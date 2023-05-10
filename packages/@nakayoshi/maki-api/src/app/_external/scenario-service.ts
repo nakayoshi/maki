@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ScenarioRankingItem = z.object({
   rank: z.number().int(),
-  title: z.string(),
+  name: z.string(),
   description: z.string(),
   imagePrompt: z.string(),
 });

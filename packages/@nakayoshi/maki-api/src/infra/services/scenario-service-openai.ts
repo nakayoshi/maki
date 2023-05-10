@@ -1,4 +1,5 @@
 import outdent from "outdent";
+import neatCsv from "neat-csv";
 
 import { OpenAIApi } from "openai";
 import {
@@ -29,34 +30,42 @@ export class ScenarioServiceOpenAI implements IScenarioService {
         {
           role: "user",
           content: outdent`
-          これから言うテーマについて、ユーモア性のあるランキングを、タイトル、説明文、画像生成用プロンプトとともにで列挙してください。
-          フォーマットは下記に示すJSONの形式にしてください。
+          これから言うテーマについて、ユーモア性のあるランキングを、名前、説明文、画像生成用プロンプトとともにで列挙してください。
 
           フォーマット：
-          [{"rank": 1, "title": "タイトル", "description": "説明文", "imagePrompt": "画像生成用プロンプト"},...]
-
+          下記に示すCSVの形式にしてください。
+          "rank","name","description","imagePrompt"
+          
           注意事項：
           ・ランキングは10位から始まり、1位で終わる
           ・文章はタメ口である
-          ・タイトルは10字程度、説明文は30字程度
-          ・画像生成用プロンプトは、 DALL·E や Stable Diffusion などの画像生成AIで利用できるカンマ区切りの英文
-
+          ・名前は10字程度、説明文は30字程度
+          ・画像生成用プロンプトは DALL·E や Stable Diffusion で利用できるカンマ区切り英単語の羅列
+          
           テーマ：${prompt}
           `,
         },
       ],
     });
 
-    const json = response.data.choices[0].message?.content;
-    this.logger.info("Created scenario", { prompt, json });
-    if (json == null) {
+    const csv = response.data.choices[0].message?.content;
+    this.logger.info("Created scenario", { prompt, csv });
+    if (csv == null) {
       throw new Error("Failed to generate");
     }
 
+    const items = await neatCsv(csv, {
+      mapValues: ({ header, value }) => {
+        if (header === "rank") return Number(value);
+        return value;
+      },
+    });
+
     const scenario = ScenarioRanking.safeParse({
       title: prompt,
-      items: JSON.parse(json),
+      items,
     });
+
     this.logger.info("Parsed scenario", { prompt, scenario });
     if (!scenario.success) {
       throw new Error("OpenAI returned malformed response");

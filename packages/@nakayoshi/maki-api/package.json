@@ -27,6 +27,7 @@
     "express": "^4.18.2",
     "express-openapi-validator": "^5.0.4",
     "mkdirp": "^3.0.1",
+    "neat-csv": "^5.2.0",
     "openai": "^3.2.1",
     "openapi2aspida": "^0.21.0",
     "outdent": "^0.8.0",
