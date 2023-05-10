@@ -5,8 +5,9 @@ import swaggerUi from "swagger-ui-express";
 import { Methods } from "./adapters/generated/rest/v1/videos";
 import { CreateVideo } from "./app/create-video";
 import { StorageCloudStorage } from "./infra/storage-cloud-storage";
-import { VideoGeneratorPlaywright } from "./infra/video-generator-playwright";
+import { TextVideoGeneratorPlaywright } from "./infra/video-generator-text-playwright";
 import path from "path";
+import { RankingVideoGeneratorPlaywright } from "./infra/video-generator-ranking-playwright";
 import { CombineVideoAndAudioFfmpeg } from "./infra/combine-video-and-audio-ffmpeg";
 
 const pathOfShiningStar = path.join(
@@ -36,24 +37,34 @@ app.post("/rest/v1/videos", async (req, res) => {
     res.status(501).send("not implemented");
   }
 
-  if (body.type === "RANKING") {
-    const storage = new StorageCloudStorage("maki-cameraman-outputs");
-    const videoGenerator = new VideoGeneratorPlaywright(
-      new URL("/ranking", process.env.THEATER_URL as string).toString(),
-      path.join(__dirname, "../videos/"),
-      { width: 1920, height: 1080 }
-    );
-    const combineVideoAndAudio = new CombineVideoAndAudioFfmpeg();
+  const storage = new StorageCloudStorage("maki-cameraman-outputs");
 
-    const createVideo = new CreateVideo(
-      storage,
-      videoGenerator,
-      combineVideoAndAudio,
-      {
-        audioPath: pathOfShiningStar,
-        outputDir: path.join(__dirname, "../videos/"),
-      }
-    );
+  const textVideoGenerator = new TextVideoGeneratorPlaywright(
+    process.env.THEATER_URL as string,
+    path.join(__dirname, "../videos/"),
+    { width: 1920, height: 1080 }
+  );
+
+  const rankingVideoGenerator = new RankingVideoGeneratorPlaywright(
+    new URL("/ranking", process.env.THEATER_URL as string).toString(),
+    path.join(__dirname, "../videos/"),
+    pathOfShiningStar
+  );
+
+  const combineAudioAndVideo = new CombineVideoAndAudioFfmpeg();
+
+  const createVideo = new CreateVideo(
+    storage,
+    rankingVideoGenerator,
+    textVideoGenerator,
+    combineAudioAndVideo,
+    {
+      audioPath: pathOfShiningStar,
+      outputDir: path.join(__dirname, "../videos/"),
+    }
+  );
+
+  if (body.type === "RANKING") {
     const url = await createVideo.invoke({
       type: "RANKING",
       title: body.title,
@@ -64,23 +75,6 @@ app.post("/rest/v1/videos", async (req, res) => {
   }
 
   if (body.type === "TEXT") {
-    const storage = new StorageCloudStorage("maki-cameraman-outputs");
-    const videoGenerator = new VideoGeneratorPlaywright(
-      process.env.THEATER_URL as string,
-      path.join(__dirname, "../videos/"),
-      { width: 1920, height: 1080 }
-    );
-    const combineVideoAndAudio = new CombineVideoAndAudioFfmpeg();
-
-    const createVideo = new CreateVideo(
-      storage,
-      videoGenerator,
-      combineVideoAndAudio,
-      {
-        audioPath: pathOfShiningStar,
-        outputDir: path.join(__dirname, "../videos/"),
-      }
-    );
     const url = await createVideo.invoke({
       type: "TEXT",
       text: body.text,
