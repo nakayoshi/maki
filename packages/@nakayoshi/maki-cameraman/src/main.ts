@@ -114,16 +114,7 @@ app.post("/rest/v1/videos:ranking", async (req, res) => {
     items: body.items,
   });
 
-  res.send({ url } as Methods["post"]["resBody"]);
-
-  // if (body.type === "TEXT") {
-  //   const url = await createVideo.invoke({
-  //     type: "TEXT",
-  //     text: body.text,
-  //   });
-
-  //   res.send({ url } as Methods["post"]["resBody"]);
-  // }
+  return res.send({ url } as Methods["post"]["resBody"]);
 });
 
 app.listen(port, (): void => {
