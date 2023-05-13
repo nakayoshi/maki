@@ -1,8 +1,8 @@
 export type RankingItem = {
+  readonly rank: number;
   readonly title: string;
   readonly description: string;
-  readonly imageUrl: string;
-  readonly rank: number;
+  readonly imageUrl?: string;
 };
 
 export type ScenarioRanking = {

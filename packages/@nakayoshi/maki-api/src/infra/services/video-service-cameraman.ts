@@ -24,9 +24,8 @@ export class VideoServiceCameraman implements IVideoService {
 
   async createVideo(params: CreateVideoRankingParams): Promise<string> {
     this.logger.info("Creating video", params);
-    const result = await this.api.rest.v1.videos.$post({
+    const result = await this.api.rest.v1.videos_ranking.$post({
       body: {
-        type: "RANKING",
         title: params.title,
         items: params.items.map((item) => ({
           rank: item.rank,

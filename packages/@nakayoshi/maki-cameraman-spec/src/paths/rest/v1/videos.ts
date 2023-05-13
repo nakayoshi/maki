@@ -1,69 +1,57 @@
 import { z } from "zod";
 import { registry } from "../../../api";
-import { Result } from "../../../components/schemas/Result";
+import { Video } from "../../../components/schemas/video";
 
-export const YukkuriPosition = z.enum([
-  "BACKGROUND",
-  "LEFT_CHARACTER",
-  "RIGHT_CHARACTER",
-  "MAIN_VIEW",
-  "TEXT_BACKGROUND",
-]);
-
-export const YukkuriImage = z.object({
-  url: z.string().url(),
-  position: YukkuriPosition,
+const CreateVideoParamsRankingItem = z.object({
+  rank: z.number().int().openapi({ description: "このアイテムの順位です" }),
+  title: z.string().openapi({ description: "このアイテムのタイトルです" }),
+  description: z.string().openapi({ description: "このアイテムの説明文です" }),
+  imageUrl: z
+    .string()
+    .url()
+    .optional()
+    .openapi({ description: "このアイテムの画像URLです" }),
 });
 
-export const YukkuriScene = z.object({
-  caption: z.string(),
-  images: YukkuriImage.array(),
-});
-
-const VideoYukkuri = z.object({
-  type: z.literal("YUKKURI"),
-  scenes: YukkuriScene.array(),
-});
-
-// ==================
-
-const RankingItem = z.object({
-  rank: z.number().int(),
-  title: z.string(),
-  imageUrl: z.string().url(),
-  description: z.string(),
-});
-
-const VideoRanking = z.object({
-  type: z.literal("RANKING"),
-  title: z.string(),
-  items: RankingItem.array(),
-});
+export const CreateVideoParamsRanking = z
+  .object({
+    title: z.string(),
+    items: CreateVideoParamsRankingItem.array(),
+  })
+  .openapi({
+    description: "ランキング形式の動画を作成するときのパラメータです。",
+  });
 
 // =================
 
-const VideoText = z.object({
-  type: z.literal("TEXT"),
-  text: z.string(),
-});
+// const CreateVideoParamsText = z
+//   .object({
+//     type: z.literal("TEXT"),
+//     text: z.string(),
+//   })
+//   .openapi({
+//     description:
+//       "テキスト形式の動画を作成するときのパラメータです。このタイプは映像サーバーが動作していることを確認するためのもので、通常は使用しません。",
+//   });
 
-export const Request = z.discriminatedUnion("type", [
-  VideoYukkuri,
-  VideoRanking,
-  VideoText,
-]);
+// export const Request = z.union([
+//   CreateVideoParamsRanking,
+//   CreateVideoParamsText,
+// ]);
 
 registry.registerPath({
   method: "post",
-  path: "/rest/v1/videos",
-  operationId: "createVideo",
-  summary: "動画を作成",
+  path: "/rest/v1/videos:ranking",
+  operationId: "create_ranking_video",
+  summary: "ランキング動画を作成",
+  description:
+    "指定した台本パラメータを元にしてランキング形式で情報を紹介する映像作品を作成します",
   request: {
     body: {
       required: true,
       content: {
         "application/json": {
-          schema: Request,
+          schema: CreateVideoParamsRanking,
         },
       },
     },
@@ -72,7 +60,7 @@ registry.registerPath({
     200: {
       description: "動画の作成に成功",
       content: {
-        "application/json": { schema: Result },
+        "application/json": { schema: Video },
       },
     },
   },
