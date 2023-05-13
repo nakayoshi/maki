@@ -1,27 +1,8 @@
-import { Request } from "./videos";
+import { CreateVideoParamsRanking } from "./videos";
 import { test, expect } from "vitest";
 
-test("parses", () => {
-  const result = Request.safeParse({
-    type: "YUKKURI",
-    scenes: [
-      {
-        caption: "test",
-        images: [
-          {
-            url: "https://example.com",
-            position: "BACKGROUND",
-          },
-        ],
-      },
-    ],
-  });
-
-  expect(result.success).toBe(true);
-});
-
 test("ランキング動画", () => {
-  const result = Request.safeParse({
+  const result = CreateVideoParamsRanking.safeParse({
     type: "RANKING",
     title: "ランキング",
     items: [
