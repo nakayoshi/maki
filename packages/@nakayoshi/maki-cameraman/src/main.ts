@@ -1,19 +1,18 @@
-import apiSpec from "@nakayoshi/maki-cameraman-spec";
-import cors from "cors";
 import express from "express";
 import * as OpenApiValidator from "express-openapi-validator";
-import { outdent } from "outdent";
-import path from "path";
+import apiSpec from "@nakayoshi/maki-cameraman-spec";
 import swaggerUi from "swagger-ui-express";
-import { CreateExplanationVideo } from "./app/create-explanation-video";
-import { CreateRankingVideo } from "./app/create-ranking-video";
-import { CreateTextVideo } from "./app/create-text-video";
-import { Level } from "./domain/services/logger";
-import { LoggerConsoleImpl } from "./infra/logger-console";
+import { Methods } from "./adapters/generated/rest/v1/videos:ranking";
+import { CreateVideo } from "./app/create-video";
 import { StorageCloudStorage } from "./infra/storage-cloud-storage";
-import { ExplanationVideoGeneratorPlaywright } from "./infra/video-generator-explanation-playwright";
-import { RankingVideoGeneratorPlaywright } from "./infra/video-generator-ranking-playwright";
 import { TextVideoGeneratorPlaywright } from "./infra/video-generator-text-playwright";
+import path from "path";
+import cors from "cors";
+import { RankingVideoGeneratorPlaywright } from "./infra/video-generator-ranking-playwright";
+import { CombineVideoAndAudioFfmpeg } from "./infra/combine-video-and-audio-ffmpeg";
+import { LoggerConsoleImpl } from "./infra/logger-console";
+import { Level } from "./domain/services/logger";
+import { outdent } from "outdent";
 
 const port = Number(process.env.PORT ?? 3000);
 const url = (process.env.APP_URL as string) ?? `http://localhost:${port}`;
@@ -77,55 +76,11 @@ app.get("/.well-known/ai-plugin.json", cors(), (_, res) => {
   });
 });
 
-app.post("/rest/v1/videos/ranking", async (req, res) => {
-  logger.debug("/rest/v1/videos/ranking", req.body);
-  const storage = new StorageCloudStorage("maki-cameraman-outputs");
+app.post("/rest/v1/videos:ranking", async (req, res) => {
+  const body = req.body as Methods["post"]["reqBody"];
 
-  const rankingVideoGenerator = new RankingVideoGeneratorPlaywright(
-    new URL("/ranking", process.env.THEATER_URL as string).toString(),
-    path.join(__dirname, "../videos/"),
-    pathOfShiningStar
-  );
+  logger.debug("/rest/v1/videos", body);
 
-  const createRankingVideo = new CreateRankingVideo(
-    storage,
-    rankingVideoGenerator
-  );
-
-  const url = await createRankingVideo.invoke({
-    type: "RANKING",
-    title: req.body.title,
-    items: req.body.items,
-  });
-
-  return res.send({ url });
-});
-
-app.post("/rest/v1/videos/explanation", async (req, res) => {
-  logger.debug("/rest/v1/videos/explanation", req.body);
-  const storage = new StorageCloudStorage("maki-cameraman-outputs");
-
-  const explanationVideoGenerator = new ExplanationVideoGeneratorPlaywright(
-    new URL("/explanation", process.env.THEATER_URL as string).toString(),
-    process.env.VOICEVOX_ENGINE_URL as string,
-    path.join(__dirname, "../videos/")
-  );
-
-  const createExplanationVideo = new CreateExplanationVideo(
-    storage,
-    explanationVideoGenerator
-  );
-
-  const url = await createExplanationVideo.invoke({
-    title: req.body.title,
-    scenes: req.body.scenes,
-  });
-
-  return res.send({ url });
-});
-
-app.post("/rest/v1/videos/text", async (req, res) => {
-  logger.debug("/rest/v1/videos/text", req.body);
   const storage = new StorageCloudStorage("maki-cameraman-outputs");
 
   const textVideoGenerator = new TextVideoGeneratorPlaywright(
@@ -134,13 +89,32 @@ app.post("/rest/v1/videos/text", async (req, res) => {
     { width: 1920, height: 1080 }
   );
 
-  const createTextVideo = new CreateTextVideo(storage, textVideoGenerator);
+  const rankingVideoGenerator = new RankingVideoGeneratorPlaywright(
+    new URL("/ranking", process.env.THEATER_URL as string).toString(),
+    path.join(__dirname, "../videos/"),
+    pathOfShiningStar
+  );
 
-  const url = await createTextVideo.invoke({
-    text: req.body.text,
+  const combineAudioAndVideo = new CombineVideoAndAudioFfmpeg();
+
+  const createVideo = new CreateVideo(
+    storage,
+    rankingVideoGenerator,
+    textVideoGenerator,
+    combineAudioAndVideo,
+    {
+      audioPath: pathOfShiningStar,
+      outputDir: path.join(__dirname, "../videos/"),
+    }
+  );
+
+  const url = await createVideo.invoke({
+    type: "RANKING",
+    title: body.title,
+    items: body.items,
   });
 
-  return res.send({ url });
+  return res.send({ url } as Methods["post"]["resBody"]);
 });
 
 app.listen(port, (): void => {

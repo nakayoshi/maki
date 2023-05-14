@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "main": "index.cjs",
   "scripts": {
-    "codegen": "rimraf ./src/adapters/generated && openapi2aspida -c ./aspida/cameraman.cjs && rimraf ./src/infra/generated && openapi2aspida -c ./aspida/voicevox-engine.cjs",
+    "codegen": "rimraf ./src/adapters/generated && openapi2aspida",
     "build": "pnpm run codegen && tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./src/main.ts",
     "start": "node ./dist/main.js"
   },
   "license": "MIT",
   "dependencies": {
-    "@aspida/fetch": "^1.12.0",
     "@google-cloud/storage": "^6.10.0",
     "@nakayoshi/maki-cameraman-spec": "workspace:^",
     "@types/cors": "^2.8.13",
@@ -19,7 +18,6 @@
     "@types/node": "^18.16.3",
     "@types/swagger-ui-express": "^4.1.3",
     "aspida": "^1.12.0",
-    "axios": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-openapi-validator": "^5.0.4",

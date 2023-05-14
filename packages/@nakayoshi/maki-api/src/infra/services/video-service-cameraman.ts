@@ -1,7 +1,6 @@
 import aspida from "@aspida/axios";
 import axios from "axios";
 import {
-  CreateVideoExplanationParams,
   CreateVideoRankingParams,
   IVideoService,
 } from "../../app/_external/video-service";
@@ -23,9 +22,9 @@ export class VideoServiceCameraman implements IVideoService {
     this.api = api(aspida(axios, axiosConfig)) as ApiInstance;
   }
 
-  async createRankingVideo(params: CreateVideoRankingParams): Promise<string> {
-    this.logger.info("[ranking video] Creating video", params);
-    const result = await this.api.rest.v1.videos.ranking.$post({
+  async createVideo(params: CreateVideoRankingParams): Promise<string> {
+    this.logger.info("Creating video", params);
+    const result = await this.api.rest.v1.videos_ranking.$post({
       body: {
         title: params.title,
         items: params.items.map((item) => ({
@@ -33,26 +32,6 @@ export class VideoServiceCameraman implements IVideoService {
           title: item.title,
           description: item.description,
           imageUrl: item.imageUrl,
-        })),
-      },
-    });
-    this.logger.info("Created video", result);
-
-    return result.url;
-  }
-
-  async createExplanationVideo(
-    params: CreateVideoExplanationParams
-  ): Promise<string> {
-    this.logger.info("[explanation video] Creating video", params);
-    const result = await this.api.rest.v1.videos.explanation.$post({
-      body: {
-        title: params.title,
-        scenes: params.scenes.map((scene) => ({
-          text: scene.text,
-          // ??
-          facialExpression: scene.facialExpression as never,
-          imageUrl: scene.imageUrl,
         })),
       },
     });

@@ -140,7 +140,7 @@ export class RankingVideoGeneratorPlaywright implements IRankingVideoGenerator {
 
     // theaterのカスタムイベント`InjectScenario`をdispatchする
     await page.evaluateHandle((detail) => {
-      const customEvent = new CustomEvent("InjectRankingScenario", {
+      const customEvent = new CustomEvent("InjectScenario", {
         detail,
       });
       window.dispatchEvent(customEvent);
