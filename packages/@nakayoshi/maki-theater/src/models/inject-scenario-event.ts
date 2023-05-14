@@ -1,3 +1,4 @@
-import { Scenario } from "./scenario";
+import { ExplanationScenario, RankingScenario } from "./scenario";
 
-export type InjectScenarioEvent = CustomEvent<Scenario>;
+export type InjectRankingScenarioEvent = CustomEvent<RankingScenario>;
+export type InjectExplanationScenarioEvent = CustomEvent<ExplanationScenario>;

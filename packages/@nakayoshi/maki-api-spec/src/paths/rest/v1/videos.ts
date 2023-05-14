@@ -8,6 +8,17 @@ const CreateVideoRankingBody = z.object({
   model: z.string().optional(),
 });
 
+const CreateVideoExplanationBody = z.object({
+  type: z.literal("EXPLANATION"),
+  prompt: z.string(),
+  model: z.string().optional(),
+});
+
+const CreateVideoBody = z.discriminatedUnion("type", [
+  CreateVideoRankingBody,
+  CreateVideoExplanationBody,
+]);
+
 registry.registerPath({
   method: "post",
   path: "/rest/v1/videos",
@@ -18,7 +29,7 @@ registry.registerPath({
       required: true,
       content: {
         "application/json": {
-          schema: CreateVideoRankingBody,
+          schema: CreateVideoBody,
         },
       },
     },

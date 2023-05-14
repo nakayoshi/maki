@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
-
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-const query_msg = route.query.text!;
+const query_msg = route.query.text;
 
 defineProps<{ msg: string }>();
 </script>

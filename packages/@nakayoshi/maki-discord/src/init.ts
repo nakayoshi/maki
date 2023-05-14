@@ -24,6 +24,24 @@ const commands: RESTPostAPIApplicationCommandsJSONBody[] = [
       },
     ],
   },
+  {
+    name: "explanation",
+    description: "ずんだもんの解説動画を生成",
+    options: [
+      {
+        type: ApplicationCommandOptionType.String,
+        name: "prompt",
+        description: "生成する動画のキーワードです",
+        required: true,
+      },
+      {
+        type: ApplicationCommandOptionType.String,
+        name: "model",
+        description: "利用するLLMの識別子です",
+        required: false,
+      },
+    ],
+  },
 ];
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
