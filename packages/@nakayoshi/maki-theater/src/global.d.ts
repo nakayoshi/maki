@@ -1,13 +1,9 @@
-import {
-  InjectExplanationScenarioEvent,
-  InjectRankingScenarioEvent,
-} from "./models/inject-scenario-event";
+import { InjectScenarioEvent } from "./models/inject-scenario-event";
 import { RankingItem } from "./models/scenario";
 
 declare global {
   interface WindowEventMap {
-    InjectRankingScenario: InjectRankingScenarioEvent;
-    InjectExplanationScenario: InjectExplanationScenarioEvent;
+    InjectScenario: InjectScenarioEvent;
   }
 
   export const __cameraman__getScenes: (() => RankingItem) | undefined;

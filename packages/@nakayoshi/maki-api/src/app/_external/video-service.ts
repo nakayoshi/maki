@@ -9,25 +9,6 @@ export type CreateVideoRankingParams = {
   }>;
 };
 
-export type ExplanationFacialExpression =
-  | "angry"
-  | "embarrassed"
-  | "fearful"
-  | "joyful"
-  | "normal"
-  | "thinking";
-
-export type CreateVideoExplanationParams = {
-  readonly type: "explanation";
-  readonly title: string;
-  readonly scenes: ReadonlyArray<{
-    readonly text: string;
-    readonly facialExpression: ExplanationFacialExpression;
-    readonly imageUrl: string;
-  }>;
-};
-
 export interface IVideoService {
-  createRankingVideo(params: CreateVideoRankingParams): Promise<string>;
-  createExplanationVideo(params: CreateVideoExplanationParams): Promise<string>;
+  createVideo(params: CreateVideoRankingParams): Promise<string>;
 }
