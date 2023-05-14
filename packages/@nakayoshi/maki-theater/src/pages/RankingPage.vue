@@ -2,24 +2,29 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import type { Ref } from "vue";
 
-import { Scenario } from "../models/scenario";
 import DebugButton from "../components/DebugButton.vue";
-import { InjectScenarioEvent } from "../models/inject-scenario-event";
 import TheaterRanking from "../components/TheaterRanking";
+import { RankingScenario } from "../models/scenario";
+import { InjectRankingScenarioEvent } from "../models/inject-scenario-event";
+import { injectRankingScenarioEvent } from "../__fixtures__/inject-ranking-scenario-event";
 
 const DEV = import.meta.env.DEV;
-const scenario: Ref<Scenario | null> = ref(null);
+const scenario: Ref<RankingScenario | null> = ref(null);
 
-const handleInjectScenario = (e: InjectScenarioEvent) => {
+const handleInjectScenario = (e: InjectRankingScenarioEvent) => {
   scenario.value = e.detail;
 };
 
+const handleInjectFixtureScenario = () => {
+  window.dispatchEvent(injectRankingScenarioEvent);
+};
+
 onMounted(() => {
-  window.addEventListener("InjectScenario", handleInjectScenario);
+  window.addEventListener("InjectRankingScenario", handleInjectScenario);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("InjectScenario", handleInjectScenario);
+  window.removeEventListener("InjectRankingScenario", handleInjectScenario);
 });
 </script>
 
@@ -29,7 +34,7 @@ onUnmounted(() => {
   </div>
 
   <div class="debug-container" v-if="DEV">
-    <DebugButton />
+    <DebugButton @click="handleInjectFixtureScenario" />
   </div>
 </template>
 

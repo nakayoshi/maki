@@ -1,41 +1,36 @@
 import { ILogger } from "../domain/service/logger";
 import { IImageService } from "./_external/image-service";
-import { IScenarioService } from "./_external/scenario-service";
+import { IExplanationScenarioService } from "./_external/scenario-service";
 import { IStorage } from "./_external/storage";
-import {
-  CreateVideoRankingParams,
-  IVideoService,
-} from "./_external/video-service";
+import { IVideoService } from "./_external/video-service";
 
-export type CreateVideoParams = {
+export type CreateExplanationVideoParams = {
   readonly prompt: string;
   readonly model?: string;
 };
 
-export type CreateVideoResult = {
+export type CreateExplanationVideoResult = {
   readonly videoUrl: string;
 };
 
-export class CreateVideo {
+export class CreateExplanationVideo {
   constructor(
     private readonly logger: ILogger,
     private readonly storage: IStorage,
     private readonly videoService: IVideoService,
-    private readonly scenarioService: IScenarioService,
+    private readonly scenarioService: IExplanationScenarioService,
     private readonly imageService: IImageService
   ) {}
 
-  async invoke(params: CreateVideoParams): Promise<CreateVideoResult> {
+  async invoke(
+    params: CreateExplanationVideoParams
+  ): Promise<CreateExplanationVideoResult> {
     const { prompt, model } = params;
 
-    const scenario = await this.scenarioService.createScenario(
-      "ranking",
-      prompt,
-      model
-    );
+    const scenario = await this.scenarioService.createScenario(prompt, model);
 
     const entries = await Promise.all(
-      Object.entries(scenario.items).map(async ([key, item]) => {
+      Object.entries(scenario.scenes).map(async ([key, item]) => {
         this.logger.info(`Creating image for ${item.imagePrompt}`);
         const imagePath = await this.imageService.createImage(item.imagePrompt);
         const file = await this.storage.upload(imagePath);
@@ -46,18 +41,15 @@ export class CreateVideo {
     );
     const imageUrls = Object.fromEntries(entries);
 
-    const videoParams: CreateVideoRankingParams = {
-      type: "ranking",
+    const videoUrl = await this.videoService.createExplanationVideo({
+      type: "explanation" as const,
       title: scenario.title,
-      items: scenario.items.map((item, index) => ({
-        rank: item.rank,
-        title: item.name,
-        description: item.description,
+      scenes: scenario.scenes.map((item, index) => ({
+        text: item.text,
+        facialExpression: item.facialExpression,
         imageUrl: imageUrls[index],
       })),
-    };
-
-    const videoUrl = await this.videoService.createVideo(videoParams);
+    });
 
     return { videoUrl };
   }

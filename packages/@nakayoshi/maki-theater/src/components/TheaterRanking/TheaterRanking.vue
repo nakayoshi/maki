@@ -2,11 +2,11 @@
 import { ref } from "vue";
 
 import RankingItem from "./RankingItem.vue";
-import { Scenario } from "../../models/scenario";
+import { RankingScenario } from "../../models/scenario";
 
 const props = withDefaults(
   defineProps<{
-    readonly scenario: Scenario;
+    readonly scenario: RankingScenario;
     readonly screenWidth: string;
     readonly itemWidth?: string;
     readonly gap: string;

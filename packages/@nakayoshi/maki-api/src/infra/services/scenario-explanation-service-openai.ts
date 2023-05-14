@@ -3,22 +3,23 @@ import neatCsv from "neat-csv";
 
 import { OpenAIApi } from "openai";
 import {
-  IScenarioService,
-  ScenarioRanking,
+  IExplanationScenarioService,
+  ScenarioExplanation,
 } from "../../app/_external/scenario-service";
 import { ILogger } from "../../domain/service/logger";
 
-export class ScenarioServiceOpenAI implements IScenarioService {
+export class ExplanationScenarioServiceOpenAI
+  implements IExplanationScenarioService
+{
   constructor(
     private readonly logger: ILogger,
     private readonly openai: OpenAIApi
   ) {}
 
   async createScenario(
-    _type: "ranking",
     prompt: string,
     model = "gpt-3.5-turbo-0301"
-  ): Promise<ScenarioRanking> {
+  ): Promise<ScenarioExplanation> {
     if (prompt.length >= 100) {
       throw new Error("Maximum length of prompt is 100");
     }
@@ -30,16 +31,17 @@ export class ScenarioServiceOpenAI implements IScenarioService {
         {
           role: "user",
           content: outdent`
-          これから言うテーマについて、ユーモア性のあるランキングを、名前、説明文、画像生成用プロンプトとともにで列挙してください。
+					「ずんだもん」という架空のキャラクターが「${prompt}」について聴衆にユーモラスに語りかける形式で解説する映像作品の台本を書いてください。
 
           フォーマット：
-          下記に示すCSVの形式にしてください。
-          "rank","name","description","imagePrompt"
+          下記に示すヘッダー付きのCSVの形式にしてください。
+          "text","facialExpression","imagePrompt"
           
           注意事項：
-          ・ランキングは10位から始まり、1位で終わる
-          ・文章はタメ口である
-          ・名前は10字程度、説明文は30字程度
+					・シーンは全てで10個
+          ・facialExpression は angry, embarrassed, fearful, joyful, normal, thinking のいずれか。空白にすることはできません。
+					・ずんだもんの語尾は「〜なのだ」「〜のだ」で、一人称は「ぼく」。
+					・各シーンのずんだ門の発言は100文字以内
           ・画像生成用プロンプトは DALL·E や Stable Diffusion で利用できるカンマ区切り英単語の羅列
           
           テーマ：${prompt}
@@ -49,21 +51,20 @@ export class ScenarioServiceOpenAI implements IScenarioService {
     });
 
     const csv = response.data.choices[0].message?.content;
-    this.logger.info("Created scenario", { prompt, csv });
     if (csv == null) {
       throw new Error("Failed to generate");
     }
 
-    const items = await neatCsv(csv, {
-      mapValues: ({ header, value }) => {
-        if (header === "rank") return Number(value);
-        return value;
+    const scenes = await neatCsv(csv, {
+      mapValues: ({ value }) => {
+        return value.trim().replace(/^"/, "").replace(/"$/, "");
       },
     });
+    this.logger.info("Created scenario", { prompt, scenes });
 
-    const scenario = ScenarioRanking.safeParse({
+    const scenario = ScenarioExplanation.safeParse({
       title: prompt,
-      items,
+      scenes,
     });
 
     this.logger.info("Parsed scenario", { prompt, scenario });
